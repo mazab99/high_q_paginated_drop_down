@@ -1,0 +1,20 @@
+name: paginated_search_drop_down
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  async: ^2.11.0
+
+dev_dependencies:
+  recase: ^4.1.0
+  flutter_test:
+    sdk: flutter
+  version: ^2.0.0
+  flutter_lints: ^2.0.1
