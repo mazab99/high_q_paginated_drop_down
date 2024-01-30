@@ -547,7 +547,7 @@ class _DropDownCard<T> extends StatelessWidget {
                 verticalDirection:
                     isReversed ? VerticalDirection.up : VerticalDirection.down,
                 children: [
-                  _DropDownSearchBar(
+                  _MultiSelectDropDownBar(
                     controller: controller,
                     searchHintText: searchHintText,
                     searchDelayDuration: searchDelayDuration,
@@ -572,12 +572,12 @@ class _DropDownCard<T> extends StatelessWidget {
   }
 }
 
-class _DropDownSearchBar<T> extends StatelessWidget {
+class _MultiSelectDropDownBar<T> extends StatelessWidget {
   final Duration? searchDelayDuration;
   final PaginatedSearchDropdownController<T> controller;
   final String? searchHintText;
 
-  const _DropDownSearchBar({
+  const _MultiSelectDropDownBar({
     required this.controller,
     this.searchHintText,
     this.searchDelayDuration,

@@ -13,7 +13,7 @@ class PopupProps<T> {
 
   final bool showSearchBox;
 
-  final DropdownSearchPopupItemBuilder<T>? itemBuilder;
+  final MultiSelectDropDownPopupItemBuilder<T>? itemBuilder;
 
   final TextFieldProps searchFieldProps;
 
@@ -31,7 +31,7 @@ class PopupProps<T> {
 
   final ErrorBuilder? errorBuilder;
 
-  final DropdownSearchPopupItemEnabled<T>? disabledItemFn;
+  final MultiSelectDropDownPopupItemEnabled<T>? disabledItemFn;
 
   final Mode mode;
 
@@ -175,7 +175,7 @@ class PopupPropsMultiSelection<T> extends PopupProps<T> {
   final OnItemRemoved<T>? onItemRemoved;
 
   ///widget used to show checked items in multiSelection mode
-  final DropdownSearchPopupItemBuilder<T>? selectionWidget;
+  final MultiSelectDropDownPopupItemBuilder<T>? selectionWidget;
 
   ///widget used to validate items in multiSelection mode
   final ValidationMultiSelectionBuilder<T>? validationWidgetBuilder;

@@ -10,10 +10,10 @@ import 'checkbox_widget.dart';
 class SelectionWidget<T> extends StatefulWidget {
   final List<T> items;
   final ValueChanged<List<T>>? onChanged;
-  final DropdownSearchOnFind<T>? asyncItems;
-  final DropdownSearchItemAsString<T>? itemAsString;
-  final DropdownSearchFilterFn<T>? filterFn;
-  final DropdownSearchCompareFn<T>? compareFn;
+  final MultiSelectDropDownOnFind<T>? asyncItems;
+  final MultiSelectDropDownItemAsString<T>? itemAsString;
+  final MultiSelectDropDownFilterFn<T>? filterFn;
+  final MultiSelectDropDownCompareFn<T>? compareFn;
   final List<T> defaultSelectedItems;
   final PopupPropsMultiSelection<T> popupProps;
   final bool isMultiSelectionMode;

@@ -15,26 +15,26 @@ class MultiSelectDropDown<T> extends StatefulWidget {
 
   final List<T> selectedItems;
 
-  final DropdownSearchOnFind<T>? asyncItems;
+  final MultiSelectDropDownOnFind<T>? asyncItems;
 
   final ValueChanged<T?>? onChanged;
 
   final ValueChanged<List<T>>? onChangedMultiSelection;
 
-  final DropdownSearchBuilder<T>? dropdownBuilder;
+  final MultiSelectDropDownBuilder<T>? dropdownBuilder;
 
-  final DropdownSearchBuilderMultiSelection<T>? dropdownBuilderMultiSelection;
+  final MultiSelectDropDownBuilderMultiSelection<T>? dropdownBuilderMultiSelection;
 
-  final DropdownSearchItemAsString<T>? itemAsString;
+  final MultiSelectDropDownItemAsString<T>? itemAsString;
 
-  final DropdownSearchFilterFn<T>? filterFn;
+  final MultiSelectDropDownFilterFn<T>? filterFn;
 
   final bool enabled;
   final String? confirmText;
   final ButtonStyle? confirmButtonStyle;
   final TextStyle? confirmTextTextStyle;
 
-  final DropdownSearchCompareFn<T>? compareFn;
+  final MultiSelectDropDownCompareFn<T>? compareFn;
 
   final AutovalidateMode? autoValidateMode;
 
@@ -123,7 +123,7 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     BeforeChangeMultiSelection<T>? onBeforeChange,
     BeforePopupOpeningMultiSelection<T>? onBeforePopupOpening,
     FormFieldValidator<List<T>>? validator,
-    DropdownSearchBuilderMultiSelection<T>? dropdownBuilder,
+    MultiSelectDropDownBuilderMultiSelection<T>? dropdownBuilder,
   })  : assert(
           !popupProps.showSelectedItems || T == String || compareFn != null,
         ),
@@ -144,10 +144,10 @@ class MultiSelectDropDown<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  DropdownSearchState<T> createState() => DropdownSearchState<T>();
+  MultiSelectDropDownState<T> createState() => MultiSelectDropDownState<T>();
 }
 
-class DropdownSearchState<T> extends State<MultiSelectDropDown<T>> {
+class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   final ValueNotifier<List<T>> _selectedItemsNotifier = ValueNotifier([]);
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
   final _popupStateKey = GlobalKey<SelectionWidgetState<T>>();
@@ -347,7 +347,7 @@ class DropdownSearchState<T> extends State<MultiSelectDropDown<T>> {
   }
 
   InputDecoration _manageDropdownDecoration(FormFieldState state) {
-    return (widget.dropdownDecoratorProps.dropdownSearchDecoration ??
+    return (widget.dropdownDecoratorProps.multiSelectDropDownDecoration ??
             const InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
               border: OutlineInputBorder(),
@@ -657,15 +657,15 @@ class DropdownSearchState<T> extends State<MultiSelectDropDown<T>> {
   }
 
   void popupValidate(List<T> itemsToValidate) {
-    closeDropDownSearch();
+    closeMultiSelectDropDown();
     changeSelectedItems(itemsToValidate);
   }
 
-  void openDropDownSearch() => _selectSearchMode();
+  void openMultiSelectDropDown() => _selectSearchMode();
 
   SelectionWidgetState<T>? get getPopupState => _popupStateKey.currentState;
 
-  void closeDropDownSearch() => _popupStateKey.currentState?.closePopup();
+  void closeMultiSelectDropDown() => _popupStateKey.currentState?.closePopup();
 
   bool get popupIsAllItemSelected =>
       _popupStateKey.currentState?.isAllItemSelected ?? false;
@@ -675,3 +675,4 @@ class DropdownSearchState<T> extends State<MultiSelectDropDown<T>> {
 
   void updatePopupState() => _popupStateKey.currentState?.setState(() {});
 }
+

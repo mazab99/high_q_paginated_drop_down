@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DropDownDecoratorProps {
-  final InputDecoration? dropdownSearchDecoration;
+  final InputDecoration? multiSelectDropDownDecoration;
   final TextStyle? baseStyle;
   final TextAlign? textAlign;
   final TextAlignVertical? textAlignVertical;
 
   const DropDownDecoratorProps({
-    this.dropdownSearchDecoration,
+    this.multiSelectDropDownDecoration,
     this.baseStyle,
     this.textAlign,
     this.textAlignVertical,

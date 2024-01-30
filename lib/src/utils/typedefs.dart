@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-typedef DropdownSearchOnFind<T> = Future<List<T>> Function(String text);
-typedef DropdownSearchItemAsString<T> = String Function(T item);
-typedef DropdownSearchFilterFn<T> = bool Function(T item, String filter);
-typedef DropdownSearchCompareFn<T> = bool Function(T item1, T item2);
-typedef DropdownSearchBuilder<T> = Widget Function(
+typedef MultiSelectDropDownOnFind<T> = Future<List<T>> Function(String text);
+typedef MultiSelectDropDownItemAsString<T> = String Function(T item);
+typedef MultiSelectDropDownFilterFn<T> = bool Function(T item, String filter);
+typedef MultiSelectDropDownCompareFn<T> = bool Function(T item1, T item2);
+typedef MultiSelectDropDownBuilder<T> = Widget Function(
     BuildContext context, T? selectedItem);
-typedef DropdownSearchBuilderMultiSelection<T> = Widget Function(
+typedef MultiSelectDropDownBuilderMultiSelection<T> = Widget Function(
   BuildContext context,
   List<T> selectedItems,
 );
-typedef DropdownSearchPopupItemBuilder<T> = Widget Function(
+typedef MultiSelectDropDownPopupItemBuilder<T> = Widget Function(
   BuildContext context,
   T item,
   bool isSelected,
 );
-typedef DropdownSearchPopupItemEnabled<T> = bool Function(T item);
+typedef MultiSelectDropDownPopupItemEnabled<T> = bool Function(T item);
 typedef ErrorBuilder<T> = Widget Function(
   BuildContext context,
   String searchEntry,

@@ -140,10 +140,10 @@ class MyApp extends StatelessWidget {
               noRecordText: const Text('HJKHJKHJKLJKJH'),
             ),
             const SizedBox(height: 50),
-            MultiSelectDropDown<String>.multiSelection(
+            MultiSelectDropDown<String>(
               dropdownDecoratorProps: DropDownDecoratorProps(
                 textAlignVertical: TextAlignVertical.center,
-                dropdownSearchDecoration: InputDecoration(
+                multiSelectDropDownDecoration: InputDecoration(
                   // icon: Icon(
                   //   Icons.local_activity_outlined,
                   //   color: HexColorManager.mainAppColor,
@@ -202,7 +202,7 @@ class MyApp extends StatelessWidget {
                 'Crafts',
                 'Arts',
               ],
-              onChanged: (List<String> val) {},
+
 
             ),
 
