@@ -163,8 +163,14 @@ class MyApp extends StatelessWidget {
               confirmText: 'done',
               confirmButtonStyle: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.red),
+                shape: MaterialStateProperty.all(
+                   RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                     side: BorderSide(color: Colors.green)
+                  ),
+                ),
               ),
-              confirmTextTextStyle: TextStyle(color: Colors.white),
+              confirmTextTextStyle: const TextStyle(color: Colors.white),
               popupProps: PopupPropsMultiSelection.menu(
                 title: const Column(
                   children: [
@@ -197,6 +203,7 @@ class MyApp extends StatelessWidget {
                 'Arts',
               ],
               onChanged: (List<String> val) {},
+
             ),
 
             // const SizedBox(height: 20),
