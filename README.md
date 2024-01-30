@@ -2,6 +2,7 @@
 In this package you have 2 types of DropDown
 1 : BasicPaginatedSearchDropdown .
 2 : PaginatedSearchDropdownFormField .
+2 : MultiSelectDropDown .
 
 ** note : don't use the same controller in more Dropdown
 every type includes ( Paginated , Future )
