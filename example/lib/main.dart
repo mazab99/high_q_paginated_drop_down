@@ -11,9 +11,9 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final PaginatedSearchDropdownController<ShopsModelData>
+  final PaginatedSearchDropdownController<Anime>
       searchableDropdownController1 =
-      PaginatedSearchDropdownController<ShopsModelData>();
+      PaginatedSearchDropdownController<Anime>();
   final PaginatedSearchDropdownController<int> searchableDropdownController2 =
       PaginatedSearchDropdownController<int>();
   final PaginatedSearchDropdownController<int> searchableDropdownController3 =
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           children: [
             const SizedBox(height: 20),
-            BasicPaginatedSearchDropdown<ShopsModelData>.paginated(
+            BasicPaginatedSearchDropdown<Anime>.paginated(
               key: dropdownFormFieldKey1,
               controller: searchableDropdownController1,
               requestItemCount: 25,
@@ -81,15 +81,15 @@ class MyApp extends StatelessWidget {
                 int page,
                 String? searchText,
               ) async {
-                final ShopsModel? paginatedList = await getAnimeList(
+                final AnimePaginatedList? paginatedList = await getAnimeList(
                   page: page,
                   searchText: searchText,
-                  searchTextKey: 'search',
+                  searchTextKey: 'q',
                 );
-                return paginatedList?.shopsModelData?.map((e) {
-                  return MenuItemModel<ShopsModelData>(
+                return paginatedList?.animeList?.map((e) {
+                  return MenuItemModel<Anime>(
                     value: e,
-                    label: e.name ?? '',
+                    label: e.title ?? '',
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
@@ -101,7 +101,7 @@ class MyApp extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          e.name ?? '',
+                          e.title ?? '',
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
               },
 
               padding: const EdgeInsets.all(0),
-              onChanged: (ShopsModelData? value) {
+              onChanged: (Anime? value) {
                 debugPrint('$value');
               },
               hasTrailingClearIcon: true,
@@ -327,7 +327,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future<ShopsModel?> getAnimeList({
+  Future<AnimePaginatedList?> getAnimeList({
     required int page,
     String? searchText,
     String? searchTextKey,
@@ -345,7 +345,7 @@ class MyApp extends StatelessWidget {
     }
 
     try {
-      String url = "https://khodrah.store/api/shops";
+      String url = "https://api.jikan.moe/v4/anime";
 
       Response<dynamic> response = await Dio().get(
         url,
@@ -357,7 +357,7 @@ class MyApp extends StatelessWidget {
         return value;
       });
       if (response.statusCode != 200) throw Exception(response.statusMessage);
-      return ShopsModel.fromJson(response.data);
+      return AnimePaginatedList.fromJson(response.data);
     } catch (exception) {
       throw Exception(exception);
     }
