@@ -17,6 +17,9 @@ class SelectionWidget<T> extends StatefulWidget {
   final List<T> defaultSelectedItems;
   final PopupPropsMultiSelection<T> popupProps;
   final bool isMultiSelectionMode;
+  final String? confirmText;
+  final ButtonStyle? confirmButtonStyle;
+  final TextStyle? confirmTextTextStyle;
 
   const SelectionWidget({
     Key? key,
@@ -25,7 +28,10 @@ class SelectionWidget<T> extends StatefulWidget {
     this.isMultiSelectionMode = false,
     this.items = const [],
     this.onChanged,
+    this.confirmTextTextStyle,
     this.asyncItems,
+    this.confirmText,
+    this.confirmButtonStyle,
     this.itemAsString,
     this.filterFn,
     this.compareFn,
@@ -243,7 +249,11 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
         alignment: Alignment.centerRight,
         child: ElevatedButton(
           onPressed: onValidate,
-          child: Text("OK"),
+          style: widget.confirmButtonStyle,
+          child: Text(
+            widget.confirmText != null ? widget.confirmText! : "OK",
+            style: widget.confirmTextTextStyle,
+          ),
         ),
       ),
     );
@@ -266,7 +276,10 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
           content: _errorWidget(error),
           actions: <Widget>[
             TextButton(
-              child: Text("OK"),
+              child: Text(
+                widget.confirmText != null ? widget.confirmText! : "OK",
+                style: widget.confirmTextTextStyle,
+              ),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
@@ -342,11 +355,9 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
       return _cachedItems.where((i) {
         if (widget.filterFn != null) {
           return (widget.filterFn!(i, filter));
-        } else if (i.toString().toLowerCase().contains(filter.toLowerCase()))
-          {
-            return true;
-          }
-        else if (widget.itemAsString != null) {
+        } else if (i.toString().toLowerCase().contains(filter.toLowerCase())) {
+          return true;
+        } else if (widget.itemAsString != null) {
           return (widget.itemAsString!(i))
               .toLowerCase()
               .contains(filter.toLowerCase());

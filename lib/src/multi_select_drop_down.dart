@@ -30,6 +30,9 @@ class MultiSelectDropDown<T> extends StatefulWidget {
   final DropdownSearchFilterFn<T>? filterFn;
 
   final bool enabled;
+  final String? confirmText;
+  final ButtonStyle? confirmButtonStyle;
+  final TextStyle? confirmTextTextStyle;
 
   final DropdownSearchCompareFn<T>? compareFn;
 
@@ -65,6 +68,9 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     Key? key,
     this.onSaved,
     this.validator,
+    this.confirmButtonStyle,
+    this.confirmTextTextStyle,
+    this.confirmText,
     this.autoValidateMode = AutovalidateMode.disabled,
     this.onChanged,
     this.items = const [],
@@ -100,6 +106,9 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     this.autoValidateMode = AutovalidateMode.disabled,
     this.items = const [],
     this.asyncItems,
+    this.confirmText,
+    this.confirmButtonStyle,
+    this.confirmTextTextStyle,
     this.dropdownDecoratorProps = const DropDownDecoratorProps(),
     this.clearButtonProps = const ClearButtonProps(),
     this.dropdownButtonProps = const DropdownButtonProps(),
@@ -526,7 +535,10 @@ class DropdownSearchState<T> extends State<MultiSelectDropDown<T>> {
       popupProps: widget.popupProps,
       itemAsString: widget.itemAsString,
       filterFn: widget.filterFn,
+      confirmText: widget.confirmText,
       items: widget.items,
+      confirmButtonStyle: widget.confirmButtonStyle,
+      confirmTextTextStyle: widget.confirmTextTextStyle,
       asyncItems: widget.asyncItems,
       onChanged: _handleOnChangeSelectedItems,
       compareFn: widget.compareFn,

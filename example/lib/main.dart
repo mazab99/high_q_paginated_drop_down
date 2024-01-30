@@ -155,17 +155,22 @@ class MyApp extends StatelessWidget {
                       width: 0.5,
                     ),
                   ),
-                  hintText:'choose',
+                  hintText: 'choose',
                   contentPadding: const EdgeInsets.all(10),
                 ),
                 textAlign: TextAlign.start,
               ),
+              confirmText: 'done',
+              confirmButtonStyle: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
+              confirmTextTextStyle: TextStyle(color: Colors.white),
               popupProps: PopupPropsMultiSelection.menu(
                 title: const Column(
                   children: [
                     SizedBox(height: 15),
                     Text(
-                     'choose_activities_practiced_by_the_babysitter',
+                      'choose_activities_practiced_by_the_babysitter',
                       textAlign: TextAlign.start,
                     ),
                     SizedBox(height: 10),
@@ -192,8 +197,8 @@ class MyApp extends StatelessWidget {
                 'Arts',
               ],
               onChanged: (List<String> val) {},
-
             ),
+
             // const SizedBox(height: 20),
             // BasicPaginatedSearchDropdown<int>(
             //   key: dropdownFormFieldKey2,
