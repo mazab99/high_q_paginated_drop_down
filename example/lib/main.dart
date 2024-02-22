@@ -83,8 +83,10 @@ class MyApp extends StatelessWidget {
               ) async {
                 final AnimePaginatedList? paginatedList = await getAnimeList(
                   page: page,
-                  searchText: searchText,
-                  searchTextKey: 'q',
+                  queryParameters: {
+                    'page':page,
+                    "q":searchText,
+                  },
                 );
                 return paginatedList?.animeList?.map((e) {
                   return MenuItemModel<Anime>(
@@ -329,30 +331,15 @@ class MyApp extends StatelessWidget {
 
   Future<AnimePaginatedList?> getAnimeList({
     required int page,
-    String? searchText,
-    String? searchTextKey,
+  Map<String, dynamic>? queryParameters,
   }) async {
-    if (searchText != null && searchTextKey == null) {
-      if (kDebugMode) {
-        PrintManager.printColoredText(
-          item:
-              'Error in getAnimeList ==>>in If you added searchText you must use searchTextKey.',
-          color: ConsoleColor.brightRedBg,
-        );
-        print('If you added searchText you must use searchTextKey.');
-      }
-      return null;
-    }
 
     try {
       String url = "https://api.jikan.moe/v4/anime";
 
       Response<dynamic> response = await Dio().get(
         url,
-        queryParameters: {
-          "page": page,
-          searchTextKey!: searchText,
-        },
+        queryParameters: queryParameters,
       ).then((value) {
         return value;
       });

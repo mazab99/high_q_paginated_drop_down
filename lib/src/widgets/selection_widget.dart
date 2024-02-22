@@ -11,6 +11,7 @@ class SelectionWidget<T> extends StatefulWidget {
   final List<T> items;
   final ValueChanged<List<T>>? onChanged;
   final MultiSelectDropDownOnFind<T>? asyncItems;
+  final Function(String)? textFieldOnChanged;
   final MultiSelectDropDownItemAsString<T>? itemAsString;
   final MultiSelectDropDownFilterFn<T>? filterFn;
   final MultiSelectDropDownCompareFn<T>? compareFn;
@@ -28,6 +29,7 @@ class SelectionWidget<T> extends StatefulWidget {
     this.isMultiSelectionMode = false,
     this.items = const [],
     this.onChanged,
+    this.textFieldOnChanged,
     this.confirmTextTextStyle,
     this.asyncItems,
     this.confirmText,
@@ -67,8 +69,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
 
     searchBoxController = widget.popupProps.searchFieldProps.controller ??
         TextEditingController();
-    searchBoxController.addListener(searchBoxControllerListener);
-
+    searchBoxController.addListener(_searchBoxControllerListener);
     Future.delayed(
       Duration.zero,
       () => _manageItemsByFilter(
@@ -76,6 +77,16 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
         isFirstLoad: true,
       ),
     );
+  }
+
+  void _searchBoxControllerListener() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(widget.popupProps.searchDelay, () {
+      if (widget.textFieldOnChanged != null) {
+        widget.textFieldOnChanged!(searchBoxController.text);
+      }
+      _manageItemsByFilter(searchBoxController.text);
+    });
   }
 
   @override
@@ -521,6 +532,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
                       DoNothingAndStopPropagationTextIntent(),
                 },
                 child: TextField(
+                  onChanged: widget.textFieldOnChanged,
                   enableIMEPersonalizedLearning: widget.popupProps
                       .searchFieldProps.enableIMEPersonalizedLearning,
                   clipBehavior: widget.popupProps.searchFieldProps.clipBehavior,

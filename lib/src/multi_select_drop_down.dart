@@ -57,6 +57,7 @@ class MultiSelectDropDown<T> extends StatefulWidget {
   final DropdownButtonProps dropdownButtonProps;
 
   final PopupPropsMultiSelection<T> popupProps;
+  final Function(String)? textFieldOnChanged;
 
   final DropDownDecoratorProps dropdownDecoratorProps;
 
@@ -68,6 +69,7 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     Key? key,
     this.onSaved,
     this.validator,
+    this.textFieldOnChanged,
     this.confirmButtonStyle,
     this.confirmTextTextStyle,
     this.confirmText,
@@ -106,6 +108,7 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     this.autoValidateMode = AutovalidateMode.disabled,
     this.items = const [],
     this.asyncItems,
+    this.textFieldOnChanged,
     this.confirmText,
     this.confirmButtonStyle,
     this.confirmTextTextStyle,
@@ -532,6 +535,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   Widget _popupWidgetInstance() {
     return SelectionWidget<T>(
       key: _popupStateKey,
+      textFieldOnChanged: widget.textFieldOnChanged,
       popupProps: widget.popupProps,
       itemAsString: widget.itemAsString,
       filterFn: widget.filterFn,
