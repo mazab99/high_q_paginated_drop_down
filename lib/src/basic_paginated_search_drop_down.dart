@@ -9,6 +9,7 @@ import '../paginated_search_drop_down.dart';
 
 class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
   final bool isEnabled;
+  final bool showTextField;
 
   final bool isDialogExpanded;
 
@@ -126,6 +127,7 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
     Widget? leadingIcon,
     void Function(T?)? onChanged,
     bool isEnabled = true,
+    bool showTextField = true,
     VoidCallback? onTapWhileDisableDropDown,
     Duration? searchDelayDuration,
     double? width,
@@ -152,6 +154,7 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
           leadingIcon: leadingIcon,
           onChanged: onChanged,
           isEnabled: isEnabled,
+    showTextField: showTextField,
           onTapWhileDisableDropDown: onTapWhileDisableDropDown,
           searchDelayDuration: searchDelayDuration,
           width: width,
@@ -165,6 +168,7 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
   const BasicPaginatedSearchDropdown._({
     super.key,
     this.controller,
+    this.showTextField = true,
     this.loadingWidget,
     this.hintText,
     this.paddingValueWhileIsDialogExpanded,
@@ -235,6 +239,7 @@ class _BasicPaginatedSearchDropdownState<T>
   Widget build(BuildContext context) {
     final dropdownWidget = _DropDown(
       controller: dropdownController,
+      showTextField: widget.showTextField,
       isEnabled: widget.isEnabled,
       paddingValueWhileIsDialogExpanded:
           widget.paddingValueWhileIsDialogExpanded,
@@ -267,6 +272,7 @@ class _BasicPaginatedSearchDropdownState<T>
 
 class _DropDown<T> extends StatelessWidget {
   final bool isEnabled;
+  final bool showTextField;
   final bool isDialogExpanded;
   final double? paddingValueWhileIsDialogExpanded;
   final bool hasTrailingClearIcon;
@@ -292,6 +298,7 @@ class _DropDown<T> extends StatelessWidget {
 
   const _DropDown({
     required this.controller,
+    required this.showTextField,
     required this.isEnabled,
     required this.isDialogExpanded,
     this.leadingIcon,
@@ -461,6 +468,7 @@ class _DropDown<T> extends StatelessWidget {
                 child: _DropDownCard(
                   controller: controller,
                   isReversed: isReversed,
+                  showTextField: showTextField,
                   noRecordText: noRecordText,
                   onChanged: onChanged,
                   paginatedRequest: paginatedRequest,
@@ -506,6 +514,7 @@ class _DropDownText<T> extends StatelessWidget {
 
 class _DropDownCard<T> extends StatelessWidget {
   final bool isReversed;
+  final bool showTextField;
   final Duration? searchDelayDuration;
   final Future<List<MenuItemModel<T>>?> Function(
     int page,
@@ -519,6 +528,7 @@ class _DropDownCard<T> extends StatelessWidget {
 
   const _DropDownCard({
     required this.controller,
+    required this.showTextField,
     required this.isReversed,
     this.searchHintText,
     this.paginatedRequest,
@@ -547,6 +557,7 @@ class _DropDownCard<T> extends StatelessWidget {
                 verticalDirection:
                     isReversed ? VerticalDirection.up : VerticalDirection.down,
                 children: [
+                  if(showTextField==true)
                   _MultiSelectDropDownBar(
                     controller: controller,
                     searchHintText: searchHintText,

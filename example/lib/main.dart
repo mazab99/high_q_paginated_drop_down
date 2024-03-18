@@ -11,8 +11,7 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final PaginatedSearchDropdownController<Anime>
-      searchableDropdownController1 =
+  final PaginatedSearchDropdownController<Anime> searchableDropdownController1 =
       PaginatedSearchDropdownController<Anime>();
   final PaginatedSearchDropdownController<int> searchableDropdownController2 =
       PaginatedSearchDropdownController<int>();
@@ -53,6 +52,62 @@ class MyApp extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             BasicPaginatedSearchDropdown<Anime>.paginated(
+              hintText: Text(
+                'search_for_city',
+                style: Theme.of(context).inputDecorationTheme.hintStyle,
+                textScaler: TextScaler.linear(1.0),
+              ),
+              searchHintText: 'search_for_city',
+              paginatedRequest: (
+                int page,
+                String? searchText,
+              ) async {
+                final paginatedList = await getAnimeList(
+                  page: page,
+                  queryParameters: {
+                    'page': page,
+                    "q": searchText,
+                  },
+                );
+                return paginatedList?.animeList?.map((e) {
+                  return MenuItemModel<Anime>(
+                    value: e,
+                    label: e.title ?? '',
+                    child: Text(
+                      e.title ?? '',
+                      style: const TextStyle(color: Colors.red, fontSize: 5,),
+                    ),
+                  );
+                }).toList();
+              },
+              padding: const EdgeInsets.all(0),
+              hasTrailingClearIcon: false,
+              searchDelayDuration: const Duration(milliseconds: 800),
+              spaceBetweenDropDownAndItemsDialog: 10,
+              isEnabled: true,
+              onTapWhileDisableDropDown: () {},
+              dropDownMaxHeight: 200,
+              isDialogExpanded: true,
+              paddingValueWhileIsDialogExpanded: 16,
+              backgroundDecoration: (child) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        15.0,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+              onChanged: (Anime? data) {},
+            ),
+            const SizedBox(height: 20),
+            BasicPaginatedSearchDropdown<Anime>.paginated(
               key: dropdownFormFieldKey1,
               controller: searchableDropdownController1,
               requestItemCount: 25,
@@ -84,30 +139,18 @@ class MyApp extends StatelessWidget {
                 final AnimePaginatedList? paginatedList = await getAnimeList(
                   page: page,
                   queryParameters: {
-                    'page':page,
-                    "q":searchText,
+                    'page': page,
+                    "q": searchText,
                   },
                 );
                 return paginatedList?.animeList?.map((e) {
                   return MenuItemModel<Anime>(
                     value: e,
                     label: e.title ?? '',
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        side: const BorderSide(
-                          color: Colors.red,
-                        ),
-                      ),
-                      color: Colors.green,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          e.title ?? '',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                    child: Text(
+                      e.title ?? '',
+                      style: const TextStyle(
+                        color: Colors.white,
                       ),
                     ),
                   );
@@ -166,10 +209,9 @@ class MyApp extends StatelessWidget {
               confirmButtonStyle: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.red),
                 shape: MaterialStateProperty.all(
-                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3),
-                     side: BorderSide(color: Colors.green)
-                  ),
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3),
+                      side: BorderSide(color: Colors.green)),
                 ),
               ),
               confirmTextTextStyle: const TextStyle(color: Colors.white),
@@ -204,8 +246,6 @@ class MyApp extends StatelessWidget {
                 'Crafts',
                 'Arts',
               ],
-
-
             ),
 
             // const SizedBox(height: 20),
@@ -331,16 +371,17 @@ class MyApp extends StatelessWidget {
 
   Future<AnimePaginatedList?> getAnimeList({
     required int page,
-  Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters,
   }) async {
-
     try {
       String url = "https://api.jikan.moe/v4/anime";
 
-      Response<dynamic> response = await Dio().get(
+      Response<dynamic> response = await Dio()
+          .get(
         url,
         queryParameters: queryParameters,
-      ).then((value) {
+      )
+          .then((value) {
         return value;
       });
       if (response.statusCode != 200) throw Exception(response.statusMessage);
