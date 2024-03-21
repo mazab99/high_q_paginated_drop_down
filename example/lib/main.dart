@@ -1,5 +1,4 @@
 import 'package:example/pagination_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:paginated_search_drop_down/paginated_search_drop_down.dart';
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
               hintText: Text(
                 'search_for_city',
                 style: Theme.of(context).inputDecorationTheme.hintStyle,
-                textScaler: TextScaler.linear(1.0),
+                textScaler: const TextScaler.linear(1.0),
               ),
               searchHintText: 'search_for_city',
               paginatedRequest: (
@@ -189,10 +188,26 @@ class MyApp extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             MultiSelectDropDown<String>(
+              selectedItems: ['1'],
+              items: const [
+                "Story-time",
+                "Outdoor Play",
+                "Board Games",
+                'Creative Play',
+                'Cooking or Baking',
+                'Learning Activities',
+                'Crafts',
+                'Arts',
+              ],
+              itemAsString: (item) {
+                return item;
+              },
+              compareFn: (item1, item2) => item1 == item2,
+              filterFn: (item, filter) => true,
               dropdownDecoratorProps: DropDownDecoratorProps(
                 textAlignVertical: TextAlignVertical.center,
                 multiSelectDropDownDecoration: InputDecoration(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.local_activity_outlined,
                     color: Colors.red,
                   ),
@@ -208,28 +223,7 @@ class MyApp extends StatelessWidget {
                 ),
                 textAlign: TextAlign.start,
               ),
-              onChanged: (List<String> value) {},
-              removeItemWidget: const Icon(
-                Icons.remove_circle_outline,
-                color: Colors.red,
-              ),
-              removeItemWidgetPadding: const EdgeInsets.all(10),
-              selectedItemTextStyle:
-                  const TextStyle(color: Colors.red, fontSize: 20),
-              confirmText: 'done',
-              clearButtonProps: const ClearButtonProps(
-                color: Colors.red,
-                icon: Icon(Icons.add),
-              ),
-              confirmButtonStyle: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3),
-                      side: BorderSide(color: Colors.green)),
-                ),
-              ),
-              confirmTextTextStyle: const TextStyle(color: Colors.white),
+
               popupProps: PopupPropsMultiSelection.menu(
                 title: const Column(
                   children: [
@@ -251,132 +245,126 @@ class MyApp extends StatelessWidget {
                 isFilterOnline: true,
                 fit: FlexFit.loose,
               ),
-              items: const [
-                "Story-time",
-                "Outdoor Play",
-                "Board Games",
-                'Creative Play',
-                'Cooking or Baking',
-                'Learning Activities',
-                'Crafts',
-                'Arts',
-              ],
+              // confirmButtonProps: ConfirmButtonProps(
+              //   confirmText: 'done',
+              //   confirmButtonStyle: ButtonStyle(
+              //     backgroundColor: MaterialStateProperty.all(Colors.red),
+              //     shape: MaterialStateProperty.all(
+              //       RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(3),
+              //         side: const BorderSide(color: Colors.green),
+              //       ),
+              //     ),
+              //     textStyle: MaterialStateProperty.all(TextStyle(color: Colors.white)),
+              //   ),
+              // ),
+              enabled: true,
+              removeItemWidget: const Icon(Icons.remove),
             ),
-
-            // const SizedBox(height: 20),
-            // BasicPaginatedSearchDropdown<int>(
-            //   key: dropdownFormFieldKey2,
-            //   controller: searchableDropdownController2,
-            //   width: 200,
-            //   isDialogExpanded: false,
-            //   backgroundDecoration: (child) => InputDecorator(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(15.0)),
-            //       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-            //       labelText: 'Pokemons',
-            //     ),
-            //     child: child,
-            //   ),
-            //   hintText: const Text('List of items'),
-            //   padding: const EdgeInsets.all(15),
-            //   items: List.generate(
-            //     10,
-            //     (i) => MenuItemModel(
-            //       value: i,
-            //       label: 'item $i',
-            //       child: Text(
-            //         'item $i',
-            //       ),
-            //     ),
-            //   ),
-            //   onChanged: (int? value) {
-            //     debugPrint('$value');
-            //   },
-            // ),
-            // const SizedBox(height: 20),
-            // Form(
-            //   key: formKey,
-            //   child: Column(
-            //     children: [
-            //       PaginatedSearchDropdownFormField<int>(
-            //         key: dropdownFormFieldKey3,
-            //         controller: searchableDropdownController3,
-            //         backgroundDecoration: (child) => InputDecorator(
-            //           decoration: InputDecoration(
-            //             border: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(15.0)),
-            //             contentPadding:
-            //                 const EdgeInsets.symmetric(horizontal: 8),
-            //             labelText: 'Anime',
-            //           ),
-            //           child: child,
-            //         ),
-            //         hintText: const Text('Search Anime'),
-            //         padding: const EdgeInsets.all(0),
-            //         items: List.generate(
-            //             10,
-            //             (i) => MenuItemModel(
-            //                 value: i,
-            //                 label: 'item $i',
-            //                 child: Text('item $i'))),
-            //         validator: (val) {
-            //           if (val == null) return 'Cant be empty';
-            //           return null;
-            //         },
-            //         onSaved: (val) {
-            //           debugPrint('On save: $val');
-            //         },
-            //       ),
-            //       const SizedBox(height: 100),
-            //       PaginatedSearchDropdownFormField<int>.paginated(
-            //         controller: searchableDropdownController4,
-            //         key: dropdownFormFieldKey4,
-            //         backgroundDecoration: (child) => InputDecorator(
-            //           decoration: InputDecoration(
-            //             border: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(15.0)),
-            //             contentPadding:
-            //                 const EdgeInsets.symmetric(horizontal: 8),
-            //             labelText: 'Pokemons',
-            //           ),
-            //           child: child,
-            //         ),
-            //         hintText: const Text('Search Pokemons'),
-            //         padding: const EdgeInsets.all(0),
-            //         paginatedRequest: (int page, String? searchText) async {
-            //           final paginatedList =
-            //               await getAnimeList(page: page, key: searchText);
-            //           return paginatedList?.animeList
-            //               ?.map((e) => MenuItemModel(
-            //                   value: e.malId,
-            //                   label: e.title ?? '',
-            //                   child: Text(e.title ?? '')))
-            //               .toList();
-            //         },
-            //         validator: (val) {
-            //           if (val == null) return 'Cant be empty';
-            //           return null;
-            //         },
-            //         onSaved: (val) {
-            //           debugPrint('On save: $val');
-            //         },
-            //       ),
+            // MultiSelectDropDown<String>(
+            //   itemsLogicProps: ItemsLogicProps(
+            //     initialSelectedItems: ['1'],
+            //     items: const [
+            //       "Story-time",
+            //       "Outdoor Play",
+            //       "Board Games",
+            //       'Creative Play',
+            //       'Cooking or Baking',
+            //       'Learning Activities',
+            //       'Crafts',
+            //       'Arts',
             //     ],
+            //     itemAsString: (item) {
+            //       return item;
+            //     },
             //   ),
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //   children: [
-            //     TextButton(
-            //       onPressed: () {
-            //         if (formKey.currentState?.validate() ?? false) {
-            //           formKey.currentState?.save();
-            //         }
-            //       },
-            //       child: const Text('Save'),
+            //   filterAndCompareProps: FilterAndCompareProps(
+            //     compareFn: (item1, item2) => item1 == item2,
+            //     filterFn: (item, filter) => true,
+            //     filterIcon: const Icon(
+            //       Icons.add,
+            //       color: Colors.red,
             //     ),
-            //   ],
+            //   ),
+            //   dropdownDecorator: DropDownDecoratorProps(
+            //     textAlignVertical: TextAlignVertical.center,
+            //     multiSelectDropDownDecoration: InputDecoration(
+            //       icon: const Icon(
+            //         Icons.local_activity_outlined,
+            //         color: Colors.red,
+            //       ),
+            //       enabledBorder: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(6),
+            //         borderSide: const BorderSide(
+            //           color: Colors.greenAccent,
+            //           width: 0.5,
+            //         ),
+            //       ),
+            //       hintText: 'choose',
+            //       contentPadding: const EdgeInsets.all(10),
+            //     ),
+            //     textAlign: TextAlign.start,
+            //   ),
+            //   selectedItemDecorationPros: SelectedItemDecorationPros(
+            //     selectedItemBoxDecoration: BoxDecoration(
+            //       color: Colors.grey,
+            //       borderRadius: BorderRadius.circular(5),
+            //     ),
+            //     removeItemWidget: const Icon(
+            //       Icons.remove_circle_outline,
+            //       color: Colors.red,
+            //     ),
+            //     removeItemWidgetPadding: const EdgeInsets.only(right: 5),
+            //     selectedItemTextPadding: const EdgeInsets.all(5),
+            //     selectedItemBoxMargin: EdgeInsets.all(5),
+            //     selectedItemTextStyle:
+            //         const TextStyle(color: Colors.white, fontSize: 10),
+            //   ),
+            //   popupProps: PopupPropsMultiSelection.menu(
+            //     title: const Column(
+            //       children: [
+            //         SizedBox(height: 15),
+            //         Text(
+            //           'choose_activities_practiced_by_the_babysitter',
+            //           textAlign: TextAlign.start,
+            //         ),
+            //         SizedBox(height: 10),
+            //       ],
+            //     ),
+            //     loadingBuilder: (context, searchEntry) {
+            //       return const CircularProgressIndicator();
+            //     },
+            //     scrollbarProps: const ScrollbarProps(
+            //       thumbColor: Colors.green,
+            //       thickness: 3,
+            //     ),
+            //     isFilterOnline: true,
+            //     fit: FlexFit.loose,
+            //   ),
+            //   validatorProps: ValidatorProps(
+            //     validator: (value) {
+            //       if (value!.isEmpty) {
+            //         return 'select at-least one';
+            //       } else {
+            //         return null;
+            //       }
+            //     },
+            //     autoValidateMode: AutovalidateMode.always,
+            //   ),
+            //   // confirmButtonProps: ConfirmButtonProps(
+            //   //   confirmText: 'done',
+            //   //   confirmButtonStyle: ButtonStyle(
+            //   //     backgroundColor: MaterialStateProperty.all(Colors.red),
+            //   //     shape: MaterialStateProperty.all(
+            //   //       RoundedRectangleBorder(
+            //   //         borderRadius: BorderRadius.circular(3),
+            //   //         side: const BorderSide(color: Colors.green),
+            //   //       ),
+            //   //     ),
+            //   //     textStyle: MaterialStateProperty.all(TextStyle(color: Colors.white)),
+            //   //   ),
+            //   // ),
+            //   enabled: true,
             // ),
           ],
         ),

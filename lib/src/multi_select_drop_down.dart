@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/properties/clear_button_props.dart';
-import 'package:paginated_search_drop_down/src/properties/dropdown_button_props.dart';
 import 'package:paginated_search_drop_down/src/properties/dropdown_decorator_props.dart';
 import 'package:paginated_search_drop_down/src/properties/popup_props.dart';
 import 'package:paginated_search_drop_down/src/utils/typedefs.dart';
@@ -28,8 +26,6 @@ class MultiSelectDropDown<T> extends StatefulWidget {
   final FormFieldValidator<List<T>>? validatorMultiSelection;
   final BeforeChangeMultiSelection<T>? onBeforeChangeMultiSelection;
   final bool isMultiSelectionMode;
-  final ClearButtonProps clearButtonProps;
-  final DropdownButtonProps dropdownButtonProps;
   final PopupPropsMultiSelection<T> popupProps;
   final Function(String)? textFieldOnChanged;
   final DropDownDecoratorProps dropdownDecoratorProps;
@@ -50,8 +46,6 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     this.confirmButtonStyle,
     this.confirmTextTextStyle,
     this.dropdownDecoratorProps = const DropDownDecoratorProps(),
-    this.clearButtonProps = const ClearButtonProps(),
-    this.dropdownButtonProps = const DropdownButtonProps(),
     this.enabled = true,
     this.filterFn,
     this.itemAsString,
@@ -64,8 +58,8 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     BeforePopupOpeningMultiSelection<T>? onBeforePopupOpening,
     FormFieldValidator<List<T>>? validator,
   })  : assert(
-          !popupProps.showSelectedItems || T == String || compareFn != null,
-        ),
+  !popupProps.showSelectedItems || T == String || compareFn != null,
+  ),
         onChangedMultiSelection = onChanged,
         onBeforePopupOpeningMultiSelection = onBeforePopupOpening,
         onSavedMultiSelection = onSaved,
@@ -217,7 +211,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
                 baseStyle: widget.dropdownDecoratorProps.baseStyle,
                 textAlign: widget.dropdownDecoratorProps.textAlign,
                 textAlignVertical:
-                    widget.dropdownDecoratorProps.textAlignVertical,
+                widget.dropdownDecoratorProps.textAlignVertical,
                 isEmpty: getSelectedItems.isEmpty,
                 isFocused: isFocused,
                 decoration: _manageDropdownDecoration(state),
@@ -230,16 +224,16 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
 
   InputDecoration _manageDropdownDecoration(FormFieldState state) {
     return (widget.dropdownDecoratorProps.multiSelectDropDownDecoration ??
-            const InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-              border: OutlineInputBorder(),
-            ))
+        const InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+          border: OutlineInputBorder(),
+        ))
         .applyDefaults(Theme.of(state.context).inputDecorationTheme)
         .copyWith(
-          enabled: widget.enabled,
-          suffixIcon: _manageSuffixIcons(),
-          errorText: state.errorText,
-        );
+      enabled: widget.enabled,
+      suffixIcon: Icon(Icons.abc_outlined),
+      errorText: state.errorText,
+    );
   }
 
   String _selectedItemAsString(T? data) {
@@ -252,68 +246,6 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
     }
   }
 
-  Widget _manageSuffixIcons() {
-    clearButtonPressed() => clear();
-    dropdownButtonPressed() => _selectSearchMode();
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        if (widget.clearButtonProps.isVisible && getSelectedItems.isNotEmpty)
-          IconButton(
-            style: widget.clearButtonProps.style,
-            isSelected: widget.clearButtonProps.isSelected,
-            selectedIcon: widget.clearButtonProps.selectedIcon,
-            onPressed: widget.clearButtonProps.onPressed ?? clearButtonPressed,
-            icon: widget.clearButtonProps.icon,
-            constraints: widget.clearButtonProps.constraints,
-            hoverColor: widget.clearButtonProps.hoverColor,
-            highlightColor: widget.clearButtonProps.highlightColor,
-            splashColor: widget.clearButtonProps.splashColor,
-            color: widget.clearButtonProps.color,
-            focusColor: widget.clearButtonProps.focusColor,
-            iconSize: widget.clearButtonProps.iconSize,
-            padding: widget.clearButtonProps.padding,
-            splashRadius: widget.clearButtonProps.splashRadius,
-            alignment: widget.clearButtonProps.alignment,
-            autofocus: widget.clearButtonProps.autofocus,
-            disabledColor: widget.clearButtonProps.disabledColor,
-            enableFeedback: widget.clearButtonProps.enableFeedback,
-            focusNode: widget.clearButtonProps.focusNode,
-            mouseCursor: widget.clearButtonProps.mouseCursor,
-            tooltip: widget.clearButtonProps.tooltip,
-            visualDensity: widget.clearButtonProps.visualDensity,
-          ),
-        if (widget.dropdownButtonProps.isVisible)
-          IconButton(
-            style: widget.dropdownButtonProps.style,
-            isSelected: widget.dropdownButtonProps.isSelected,
-            selectedIcon: widget.dropdownButtonProps.selectedIcon,
-            onPressed:
-                widget.dropdownButtonProps.onPressed ?? dropdownButtonPressed,
-            icon: widget.dropdownButtonProps.icon,
-            constraints: widget.dropdownButtonProps.constraints,
-            hoverColor: widget.dropdownButtonProps.hoverColor,
-            highlightColor: widget.dropdownButtonProps.highlightColor,
-            splashColor: widget.dropdownButtonProps.splashColor,
-            color: widget.dropdownButtonProps.color,
-            focusColor: widget.dropdownButtonProps.focusColor,
-            iconSize: widget.dropdownButtonProps.iconSize,
-            padding: widget.dropdownButtonProps.padding,
-            splashRadius: widget.dropdownButtonProps.splashRadius,
-            alignment: widget.dropdownButtonProps.alignment,
-            autofocus: widget.dropdownButtonProps.autofocus,
-            disabledColor: widget.dropdownButtonProps.disabledColor,
-            enableFeedback: widget.dropdownButtonProps.enableFeedback,
-            focusNode: widget.dropdownButtonProps.focusNode,
-            mouseCursor: widget.dropdownButtonProps.mouseCursor,
-            tooltip: widget.dropdownButtonProps.tooltip,
-            visualDensity: widget.dropdownButtonProps.visualDensity,
-          ),
-      ],
-    );
-  }
 
   RelativeRect _position(RenderBox popupButtonObject, RenderBox overlay) {
     return RelativeRect.fromSize(
@@ -336,7 +268,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
       barrierLabel: widget.popupProps.dialogProps.barrierLabel,
       transitionDuration: widget.popupProps.dialogProps.transitionDuration,
       barrierColor:
-          widget.popupProps.dialogProps.barrierColor ?? Colors.black54,
+      widget.popupProps.dialogProps.barrierColor ?? Colors.black54,
       useRootNavigator: widget.popupProps.dialogProps.useRootNavigator,
       anchorPoint: widget.popupProps.dialogProps.anchorPoint,
       transitionBuilder: widget.popupProps.dialogProps.transitionBuilder,
@@ -344,13 +276,13 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
         return AlertDialog(
           buttonPadding: widget.popupProps.dialogProps.buttonPadding,
           actionsOverflowButtonSpacing:
-              widget.popupProps.dialogProps.actionsOverflowButtonSpacing,
+          widget.popupProps.dialogProps.actionsOverflowButtonSpacing,
           insetPadding: widget.popupProps.dialogProps.insetPadding,
           actionsPadding: widget.popupProps.dialogProps.actionsPadding,
           actionsOverflowDirection:
-              widget.popupProps.dialogProps.actionsOverflowDirection,
+          widget.popupProps.dialogProps.actionsOverflowDirection,
           actionsOverflowAlignment:
-              widget.popupProps.dialogProps.actionsOverflowAlignment,
+          widget.popupProps.dialogProps.actionsOverflowAlignment,
           actionsAlignment: widget.popupProps.dialogProps.actionsAlignment,
           actions: widget.popupProps.dialogProps.actions,
           alignment: widget.popupProps.dialogProps.alignment,
@@ -373,22 +305,22 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
       useSafeArea: widget.popupProps.modalBottomSheetProps.useSafeArea,
       barrierColor: widget.popupProps.modalBottomSheetProps.barrierColor,
       backgroundColor:
-          widget.popupProps.modalBottomSheetProps.backgroundColor ??
-              sheetTheme.modalBackgroundColor ??
-              sheetTheme.backgroundColor ??
-              Colors.white,
+      widget.popupProps.modalBottomSheetProps.backgroundColor ??
+          sheetTheme.modalBackgroundColor ??
+          sheetTheme.backgroundColor ??
+          Colors.white,
       isDismissible: widget.popupProps.modalBottomSheetProps.barrierDismissible,
       isScrollControlled:
-          widget.popupProps.modalBottomSheetProps.isScrollControlled,
+      widget.popupProps.modalBottomSheetProps.isScrollControlled,
       enableDrag: widget.popupProps.modalBottomSheetProps.enableDrag,
       clipBehavior: widget.popupProps.modalBottomSheetProps.clipBehavior,
       elevation: widget.popupProps.modalBottomSheetProps.elevation,
       shape: widget.popupProps.modalBottomSheetProps.shape,
       anchorPoint: widget.popupProps.modalBottomSheetProps.anchorPoint,
       useRootNavigator:
-          widget.popupProps.modalBottomSheetProps.useRootNavigator,
+      widget.popupProps.modalBottomSheetProps.useRootNavigator,
       transitionAnimationController:
-          widget.popupProps.modalBottomSheetProps.animation,
+      widget.popupProps.modalBottomSheetProps.animation,
       constraints: widget.popupProps.modalBottomSheetProps.constraints,
       builder: (ctx) => _popupWidgetInstance(),
     );

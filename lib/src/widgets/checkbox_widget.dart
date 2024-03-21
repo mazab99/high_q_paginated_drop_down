@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-typedef Widget WidgetCheckBox(BuildContext context, bool isChecked);
+typedef WidgetCheckBox = Widget Function(BuildContext context, bool isChecked);
 
 class CheckBoxWidget extends StatefulWidget {
   final WidgetCheckBox? layout;
@@ -23,7 +23,7 @@ class CheckBoxWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CheckBoxWidgetState createState() => _CheckBoxWidgetState();
+  State<CheckBoxWidget> createState() => _CheckBoxWidgetState();
 }
 
 class _CheckBoxWidgetState extends State<CheckBoxWidget> {
@@ -38,7 +38,9 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
   @override
   void didUpdateWidget(covariant CheckBoxWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isChecked != oldWidget.isChecked) isCheckedNotifier.value = widget.isChecked;
+    if (widget.isChecked != oldWidget.isChecked) {
+      isCheckedNotifier.value = widget.isChecked;
+    }
   }
 
   @override
@@ -51,16 +53,19 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
           var w = Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              widget.layout != null ? Expanded(child: widget.layout!(context, v == true)) : Container(),
+              widget.layout != null
+                  ? Expanded(child: widget.layout!(context, v == true))
+                  : Container(),
               widget.checkBox != null
                   ? widget.checkBox!(context, v == true)
-                  : Checkbox(value: v, onChanged: widget.isDisabled ? null : (b) {}),
+                  : Checkbox(
+                      value: v, onChanged: widget.isDisabled ? null : (b) {}),
             ],
           );
 
-          if (widget.interceptCallBacks)
+          if (widget.interceptCallBacks) {
             return w;
-          else
+          } else {
             return InkWell(
               onTap: widget.isDisabled
                   ? null
@@ -70,6 +75,7 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
                     },
               child: IgnorePointer(child: w),
             );
+          }
         },
       ),
     );

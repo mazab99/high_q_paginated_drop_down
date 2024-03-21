@@ -1,6 +1,6 @@
 name: paginated_search_drop_down
 description: Package handles the pagination and search in DropDown .
-version: 1.0.5
+version: 1.0.6
 homepage: https://github.com/mazab99/paginated_search_drop_down
 
 environment:
