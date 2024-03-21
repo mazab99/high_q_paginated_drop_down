@@ -75,7 +75,10 @@ class MyApp extends StatelessWidget {
                     label: e.title ?? '',
                     child: Text(
                       e.title ?? '',
-                      style: const TextStyle(color: Colors.red, fontSize: 5,),
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 5,
+                      ),
                     ),
                   );
                 }).toList();
@@ -189,10 +192,10 @@ class MyApp extends StatelessWidget {
               dropdownDecoratorProps: DropDownDecoratorProps(
                 textAlignVertical: TextAlignVertical.center,
                 multiSelectDropDownDecoration: InputDecoration(
-                  // icon: Icon(
-                  //   Icons.local_activity_outlined,
-                  //   color: HexColorManager.mainAppColor,
-                  // ),
+                  icon: Icon(
+                    Icons.local_activity_outlined,
+                    color: Colors.red,
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
                     borderSide: const BorderSide(
@@ -205,7 +208,19 @@ class MyApp extends StatelessWidget {
                 ),
                 textAlign: TextAlign.start,
               ),
+              onChanged: (List<String> value) {},
+              removeItemWidget: const Icon(
+                Icons.remove_circle_outline,
+                color: Colors.red,
+              ),
+              removeItemWidgetPadding: const EdgeInsets.all(10),
+              selectedItemTextStyle:
+                  const TextStyle(color: Colors.red, fontSize: 20),
               confirmText: 'done',
+              clearButtonProps: const ClearButtonProps(
+                color: Colors.red,
+                icon: Icon(Icons.add),
+              ),
               confirmButtonStyle: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.red),
                 shape: MaterialStateProperty.all(
