@@ -191,6 +191,7 @@ class MyApp extends StatelessWidget {
             // const SizedBox(height: 50),
             MultiSelectDropDown<String>(
               key: UniqueKey(),
+              enabled: true,
               itemsLogicProps: ItemsLogicProps(
                 items: const [
                   "Story-time",
@@ -303,18 +304,17 @@ class MyApp extends StatelessWidget {
               ),
               selectedItemDecorationPros: SelectedItemDecorationPros(
                 selectedItemBoxDecoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.black54,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 removeItemWidget: const Icon(
                   Icons.remove_circle_outline,
                   color: Colors.red,
                 ),
-                removeItemWidgetPadding: const EdgeInsets.only(right: 10),
-                selectedItemTextPadding: const EdgeInsets.only(right: 10),
+                removeItemWidgetPadding: const EdgeInsets.all(5),
+                selectedItemTextPadding: const EdgeInsets.all(5),
                 selectedItemBoxMargin: const EdgeInsets.all(5),
-                selectedItemTextStyle:
-                    const TextStyle(color: Colors.white, fontSize: 10),
+                selectedItemTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
               ),
               confirmButtonProps: ConfirmButtonProps(
                 confirmText: 'done',
@@ -342,7 +342,6 @@ class MyApp extends StatelessWidget {
                 },
                 autoValidateMode: AutovalidateMode.always,
               ),
-              enabled: true,
               methodLogicProps: MethodLogicProps(
                 onChanged: (value) {
                   if (kDebugMode) {
