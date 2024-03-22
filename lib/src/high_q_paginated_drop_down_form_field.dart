@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/paginated_search_drop_down_controller.dart';
-import 'basic_paginated_search_drop_down.dart';
+import 'package:paginated_search_drop_down/src/high_q_paginated_drop_down_controller.dart';
+import 'high_q_paginated_drop_down.dart';
 import 'model/menu_item_model.dart';
 
 @immutable
@@ -211,7 +211,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (items != null)
-                    BasicPaginatedSearchDropdown<T>(
+                    HighQPaginatedDropdown<T>(
                       controller: controller,
                       key: key,
                       backgroundDecoration: backgroundDecoration,
@@ -235,7 +235,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                       spaceBetweenDropDownAndItemsDialog: spaceBetweenDropDownAndItemsDialog,
                     ),
                   if (paginatedRequest != null)
-                    BasicPaginatedSearchDropdown<T>.paginated(
+                    HighQPaginatedDropdown<T>.paginated(
                       controller: controller,
                       paginatedRequest: paginatedRequest,
                       requestItemCount: requestItemCount,

@@ -2,7 +2,7 @@ import 'package:example/pagination_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:paginated_search_drop_down/paginated_search_drop_down.dart';
+import 'package:paginated_search_drop_down/high_q_paginated_drop_down.dart';
 
 void main() {
   runApp(MyApp());
@@ -51,144 +51,144 @@ class MyApp extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            // const SizedBox(height: 20),
-            // BasicPaginatedSearchDropdown<Anime>.paginated(
-            //   hintText: Text(
-            //     'search_for_city',
-            //     style: Theme.of(context).inputDecorationTheme.hintStyle,
-            //     textScaler: const TextScaler.linear(1.0),
-            //   ),
-            //   searchHintText: 'search_for_city',
-            //   paginatedRequest: (
-            //     int page,
-            //     String? searchText,
-            //   ) async {
-            //     final paginatedList = await getAnimeList(
-            //       page: page,
-            //       queryParameters: {
-            //         'page': page,
-            //         "q": searchText,
-            //       },
-            //     );
-            //     return paginatedList?.animeList?.map((e) {
-            //       return MenuItemModel<Anime>(
-            //         value: e,
-            //         label: e.title ?? '',
-            //         child: Text(
-            //           e.title ?? '',
-            //           style: const TextStyle(
-            //             color: Colors.green,
-            //             fontSize: 5,
-            //           ),
-            //         ),
-            //       );
-            //     }).toList();
-            //   },
-            //   padding: const EdgeInsets.all(0),
-            //   hasTrailingClearIcon: false,
-            //   searchDelayDuration: const Duration(milliseconds: 800),
-            //   spaceBetweenDropDownAndItemsDialog: 10,
-            //   isEnabled: true,
-            //   onTapWhileDisableDropDown: () {},
-            //   dropDownMaxHeight: 200,
-            //   isDialogExpanded: true,
-            //   paddingValueWhileIsDialogExpanded: 16,
-            //   backgroundDecoration: (child) {
-            //     return InputDecorator(
-            //       decoration: InputDecoration(
-            //         border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(
-            //             15.0,
-            //           ),
-            //         ),
-            //         contentPadding: const EdgeInsets.symmetric(
-            //           horizontal: 8,
-            //         ),
-            //       ),
-            //       child: child,
-            //     );
-            //   },
-            //   onChanged: (Anime? data) {},
-            // ),
-            // const SizedBox(height: 20),
-            // BasicPaginatedSearchDropdown<Anime>.paginated(
-            //   key: dropdownFormFieldKey1,
-            //   controller: searchableDropdownController1,
-            //   requestItemCount: 25,
-            //   width: 10,
-            //   loadingWidget: const CircularProgressIndicator(
-            //     color: Colors.green,
-            //   ),
-            //   backgroundDecoration: (child) {
-            //     return InputDecorator(
-            //       decoration: InputDecoration(
-            //         border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(
-            //             15.0,
-            //           ),
-            //         ),
-            //         contentPadding: const EdgeInsets.symmetric(
-            //           horizontal: 8,
-            //         ),
-            //         labelText: 'Pokemons',
-            //       ),
-            //       child: child,
-            //     );
-            //   },
-            //   hintText: const Text('Search Anime'),
-            //   paginatedRequest: (
-            //     int page,
-            //     String? searchText,
-            //   ) async {
-            //     final AnimePaginatedList? paginatedList = await getAnimeList(
-            //       page: page,
-            //       queryParameters: {
-            //         'page': page,
-            //         "q": searchText,
-            //       },
-            //     );
-            //     return paginatedList?.animeList?.map((e) {
-            //       return MenuItemModel<Anime>(
-            //         value: e,
-            //         label: e.title ?? '',
-            //         child: Text(
-            //           e.title ?? '',
-            //           style: const TextStyle(
-            //             color: Colors.white,
-            //           ),
-            //         ),
-            //       );
-            //     }).toList();
-            //   },
-            //
-            //   padding: const EdgeInsets.all(0),
-            //   onChanged: (Anime? value) {
-            //     debugPrint('$value');
-            //   },
-            //   hasTrailingClearIcon: true,
-            //   trailingIcon: const Icon(
-            //     Icons.arrow_circle_down_outlined,
-            //     color: Colors.green,
-            //   ),
-            //   searchHintText: 'Hi search for any thing',
-            //   trailingClearIcon: const Icon(
-            //     Icons.delete,
-            //     color: Colors.green,
-            //   ),
-            //   searchDelayDuration: const Duration(milliseconds: 800),
-            //   leadingIcon: const Icon(
-            //     Icons.language,
-            //     color: Colors.green,
-            //   ),
-            //   spaceBetweenDropDownAndItemsDialog: 10,
-            //   isEnabled: true,
-            //   onTapWhileDisableDropDown: () {},
-            //   //dropDownMaxHeight: 150,
-            //   isDialogExpanded: true,
-            //   paddingValueWhileIsDialogExpanded: 16,
-            //   noRecordText: const Text('HJKHJKHJKLJKJH'),
-            // ),
-            // const SizedBox(height: 50),
+            const SizedBox(height: 20),
+            HighQPaginatedDropdown<Anime>.paginated(
+              hintText: Text(
+                'search_for_city',
+                style: Theme.of(context).inputDecorationTheme.hintStyle,
+                textScaler: const TextScaler.linear(1.0),
+              ),
+              searchHintText: 'search_for_city',
+              paginatedRequest: (
+                int page,
+                String? searchText,
+              ) async {
+                final paginatedList = await getAnimeList(
+                  page: page,
+                  queryParameters: {
+                    'page': page,
+                    "q": searchText,
+                  },
+                );
+                return paginatedList?.animeList?.map((e) {
+                  return MenuItemModel<Anime>(
+                    value: e,
+                    label: e.title ?? '',
+                    child: Text(
+                      e.title ?? '',
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 5,
+                      ),
+                    ),
+                  );
+                }).toList();
+              },
+              padding: const EdgeInsets.all(0),
+              hasTrailingClearIcon: false,
+              searchDelayDuration: const Duration(milliseconds: 800),
+              spaceBetweenDropDownAndItemsDialog: 10,
+              isEnabled: true,
+              onTapWhileDisableDropDown: () {},
+              dropDownMaxHeight: 200,
+              isDialogExpanded: true,
+              paddingValueWhileIsDialogExpanded: 16,
+              backgroundDecoration: (child) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        15.0,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+              onChanged: (Anime? data) {},
+            ),
+            const SizedBox(height: 20),
+            HighQPaginatedDropdown<Anime>.paginated(
+              key: dropdownFormFieldKey1,
+              controller: searchableDropdownController1,
+              requestItemCount: 25,
+              width: 10,
+              loadingWidget: const CircularProgressIndicator(
+                color: Colors.green,
+              ),
+              backgroundDecoration: (child) {
+                return InputDecorator(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        15.0,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                    ),
+                    labelText: 'Pokemons',
+                  ),
+                  child: child,
+                );
+              },
+              hintText: const Text('Search Anime'),
+              paginatedRequest: (
+                int page,
+                String? searchText,
+              ) async {
+                final AnimePaginatedList? paginatedList = await getAnimeList(
+                  page: page,
+                  queryParameters: {
+                    'page': page,
+                    "q": searchText,
+                  },
+                );
+                return paginatedList?.animeList?.map((e) {
+                  return MenuItemModel<Anime>(
+                    value: e,
+                    label: e.title ?? '',
+                    child: Text(
+                      e.title ?? '',
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                }).toList();
+              },
+
+              padding: const EdgeInsets.all(0),
+              onChanged: (Anime? value) {
+                debugPrint('$value');
+              },
+              hasTrailingClearIcon: true,
+              trailingIcon: const Icon(
+                Icons.arrow_circle_down_outlined,
+                color: Colors.green,
+              ),
+              searchHintText: 'Hi search for any thing',
+              trailingClearIcon: const Icon(
+                Icons.delete,
+                color: Colors.green,
+              ),
+              searchDelayDuration: const Duration(milliseconds: 800),
+              leadingIcon: const Icon(
+                Icons.language,
+                color: Colors.green,
+              ),
+              spaceBetweenDropDownAndItemsDialog: 10,
+              isEnabled: true,
+              onTapWhileDisableDropDown: () {},
+              //dropDownMaxHeight: 150,
+              isDialogExpanded: true,
+              paddingValueWhileIsDialogExpanded: 16,
+              noRecordText: const Text('HJKHJKHJKLJKJH'),
+            ),
+            const SizedBox(height: 50),
             MultiSelectDropDown<String>(
               key: UniqueKey(),
               enabled: true,
@@ -314,7 +314,7 @@ class MyApp extends StatelessWidget {
                 removeItemWidgetPadding: const EdgeInsets.all(5),
                 selectedItemTextPadding: const EdgeInsets.all(5),
                 selectedItemBoxMargin: const EdgeInsets.all(5),
-                selectedItemTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
+                selectedItemTextStyle: const TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.w900,),
               ),
               confirmButtonProps: ConfirmButtonProps(
                 confirmText: 'done',

@@ -5,9 +5,9 @@ import 'package:paginated_search_drop_down/src/extensions/context_extension.dart
 import 'package:paginated_search_drop_down/src/extensions/global_paint_bounds.dart';
 import 'package:paginated_search_drop_down/src/utils/package_inkwell_widget.dart';
 import 'package:paginated_search_drop_down/src/utils/package_search_bar.dart';
-import '../paginated_search_drop_down.dart';
+import '../high_q_paginated_drop_down.dart';
 
-class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
+class HighQPaginatedDropdown<T> extends StatefulWidget {
   final bool isEnabled;
   final bool showTextField;
 
@@ -60,7 +60,7 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
 
   final Widget Function(Widget child)? backgroundDecoration;
 
-  const BasicPaginatedSearchDropdown({
+  const HighQPaginatedDropdown({
     Key? key,
     PaginatedSearchDropdownController<T>? controller,
     Widget? hintText,
@@ -107,7 +107,7 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
               spaceBetweenDropDownAndItemsDialog,
         );
 
-  const BasicPaginatedSearchDropdown.paginated({
+  const HighQPaginatedDropdown.paginated({
     required Future<List<MenuItemModel<T>>?> Function(
       int,
       String?,
@@ -165,7 +165,7 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
               spaceBetweenDropDownAndItemsDialog,
         );
 
-  const BasicPaginatedSearchDropdown._({
+  const HighQPaginatedDropdown._({
     super.key,
     this.controller,
     this.showTextField = true,
@@ -196,12 +196,12 @@ class BasicPaginatedSearchDropdown<T> extends StatefulWidget {
   });
 
   @override
-  State<BasicPaginatedSearchDropdown<T>> createState() =>
-      _BasicPaginatedSearchDropdownState<T>();
+  State<HighQPaginatedDropdown<T>> createState() =>
+      _HighQPaginatedDropdownState<T>();
 }
 
-class _BasicPaginatedSearchDropdownState<T>
-    extends State<BasicPaginatedSearchDropdown<T>> {
+class _HighQPaginatedDropdownState<T>
+    extends State<HighQPaginatedDropdown<T>> {
   late final PaginatedSearchDropdownController<T> dropdownController;
 
   @override
