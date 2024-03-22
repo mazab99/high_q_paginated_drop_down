@@ -9,9 +9,11 @@ every type includes ( Paginated , Future )
 
 if You need to make pagination use BasicPaginatedSearchDropdown.paginated
 
+HighQPaginatedDropdown<int>.paginated
+
 ex : 
 ```dart
-BasicPaginatedSearchDropdown<int>.paginated(
+HighQPaginatedDropdown<int>.paginated(
   requestItemCount: 25,
   backgroundDecoration: (child) => InputDecorator(
     decoration: InputDecoration(
@@ -55,7 +57,7 @@ if You need to make pagination and validation in same time use PaginatedSearchDr
 
 ex : 
 ```dart
-PaginatedSearchDropdownFormField<int>.paginated(
+HighQPaginatedDropdown<int>.paginated(
   controller: searchableDropdownController,
   backgroundDecoration: (child) => InputDecorator(
     decoration: InputDecoration(
@@ -89,75 +91,3 @@ PaginatedSearchDropdownFormField<int>.paginated(
 );
 ```
 
-
-
-if You need to multiselect use MultiSelectDropDown
-
-ex : 
-```dart
-MultiSelectDropDown<String>(
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                textAlignVertical: TextAlignVertical.center,
-                multiSelectDropDownDecoration: InputDecoration(
-                  // icon: Icon(
-                  //   Icons.local_activity_outlined,
-                  //   color: HexColorManager.mainAppColor,
-                  // ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      color: Colors.greenAccent,
-                      width: 0.5,
-                    ),
-                  ),
-                  hintText: 'choose',
-                  contentPadding: const EdgeInsets.all(10),
-                ),
-                textAlign: TextAlign.start,
-              ),
-              confirmText: 'done',
-              confirmButtonStyle: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-                shape: MaterialStateProperty.all(
-                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3),
-                     side: BorderSide(color: Colors.green)
-                  ),
-                ),
-              ),
-              confirmTextTextStyle: const TextStyle(color: Colors.white),
-              popupProps: PopupPropsMultiSelection.menu(
-                title: const Column(
-                  children: [
-                    SizedBox(height: 15),
-                    Text(
-                      'choose_activities_practiced_by_the_babysitter',
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-                loadingBuilder: (context, searchEntry) {
-                  return const CircularProgressIndicator();
-                },
-                scrollbarProps: const ScrollbarProps(
-                  thumbColor: Colors.green,
-                  thickness: 3,
-                ),
-                isFilterOnline: true,
-                fit: FlexFit.loose,
-              ),
-              items: const [
-                "Story-time",
-                "Outdoor Play",
-                "Board Games",
-                'Creative Play',
-                'Cooking or Baking',
-                'Learning Activities',
-                'Crafts',
-                'Arts',
-              ],
-
-
-            ),
-```
