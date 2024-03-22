@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +26,7 @@ class SelectionWidget<T> extends StatefulWidget {
     this.defaultSelectedItems = const [],
     this.items = const [],
     this.onChanged,
-    this.confirmButtonPadding= const EdgeInsets.symmetric(horizontal: 8),
+    this.confirmButtonPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.confirmTextTextStyle,
     this.asyncItems,
     this.confirmText,
@@ -55,9 +54,12 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
 
   void searchBoxControllerListener() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(widget.popupProps.searchDelay, () {
-      _manageItemsByFilter(searchBoxController.text);
-    });
+    _debounce = Timer(
+      widget.popupProps.searchDelay,
+      () {
+        _manageItemsByFilter(searchBoxController.text);
+      },
+    );
   }
 
   @override
@@ -69,21 +71,26 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
     searchBoxController.addListener(_searchBoxControllerListener);
     Future.delayed(
       Duration.zero,
-      () => _manageItemsByFilter(
-        searchBoxController.text,
-        isFirstLoad: true,
-      ),
+      () {
+        return _manageItemsByFilter(
+          searchBoxController.text,
+          isFirstLoad: true,
+        );
+      },
     );
   }
 
   void _searchBoxControllerListener() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(widget.popupProps.searchDelay, () {
-      if (widget.popupProps.textFieldOnChanged != null) {
-        widget.popupProps.textFieldOnChanged!(searchBoxController.text);
-      }
-      _manageItemsByFilter(searchBoxController.text);
-    });
+    _debounce = Timer(
+      widget.popupProps.searchDelay,
+      () {
+        if (widget.popupProps.textFieldOnChanged != null) {
+          widget.popupProps.textFieldOnChanged!(searchBoxController.text);
+        }
+        _manageItemsByFilter(searchBoxController.text);
+      },
+    );
   }
 
   @override
@@ -235,18 +242,17 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
     );
   }
 
-  ///validation of selected items
   void onValidate() {
     closePopup();
     if (widget.onChanged != null) widget.onChanged!(_selectedItems);
   }
 
-  ///close popup
   void closePopup() => Navigator.pop(context);
 
   Widget _confirmButton() {
     Widget defaultConfirmButton = Padding(
-      padding:widget.confirmButtonPadding ?? const EdgeInsets.symmetric(horizontal: 8),
+      padding: widget.confirmButtonPadding ??
+          const EdgeInsets.symmetric(horizontal: 8),
       child: Align(
         alignment: Alignment.center,
         child: ElevatedButton(
@@ -614,53 +620,59 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: constraints.maxWidth),
-            child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment:
-                    widget.popupProps.favoriteItemProps.favoriteItemsAlignment,
-                children: favoriteItems
-                    .map(
-                      (f) => InkWell(
-                        onTap: () => _handleSelectedItem(f),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          var favoriteItemProps = widget.popupProps.favoriteItemProps;
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: constraints.maxWidth),
+              child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: favoriteItemProps.favoriteItemsAlignment,
+                  children: favoriteItems.map(
+                    (f) {
+                      return InkWell(
+                        onTap: () {
+                          _handleSelectedItem(f);
+                        },
                         child: Container(
                           margin: EdgeInsets.only(right: 4),
-                          child: widget.popupProps.favoriteItemProps
-                                      .favoriteItemBuilder !=
-                                  null
-                              ? widget.popupProps.favoriteItemProps
-                                  .favoriteItemBuilder!(
+                          child: favoriteItemProps.favoriteItemBuilder != null
+                              ? favoriteItemProps.favoriteItemBuilder!(
                                   context,
                                   f,
                                   _isSelectedItem(f),
                                 )
                               : _favoriteItemDefaultWidget(f),
                         ),
-                      ),
-                    )
-                    .toList()),
-          ),
-        );
-      }),
+                      );
+                    },
+                  ).toList()),
+            ),
+          );
+        },
+      ),
     );
   }
 
   void _handleSelectedItem(T newSelectedItem) {
+    var popupProps = widget.popupProps;
     if (_isSelectedItem(newSelectedItem)) {
       _selectedItemsNotifier.value = List.from(_selectedItems)
-        ..removeWhere((i) => _isEqual(newSelectedItem, i));
-      if (widget.popupProps.onItemRemoved != null) {
-        widget.popupProps.onItemRemoved!(_selectedItems, newSelectedItem);
+        ..removeWhere(
+          (i) {
+            return _isEqual(newSelectedItem, i);
+          },
+        );
+      if (popupProps.onItemRemoved != null) {
+        popupProps.onItemRemoved!(_selectedItems, newSelectedItem);
       }
     } else {
       _selectedItemsNotifier.value = List.from(_selectedItems)
         ..add(newSelectedItem);
-      if (widget.popupProps.onItemAdded != null) {
-        widget.popupProps.onItemAdded!(_selectedItems, newSelectedItem);
+      if (popupProps.onItemAdded != null) {
+        popupProps.onItemAdded!(_selectedItems, newSelectedItem);
       }
     }
   }
@@ -688,7 +700,6 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
     );
   }
 
-  ///function that return the String value of an object
   String _selectedItemAsString(T data) {
     if (data == null) {
       return "";
@@ -700,13 +711,14 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   }
 
   void selectItems(List<T> itemsToSelect) {
+    var popupProps = widget.popupProps;
     List<T> newSelectedItems = _selectedItems;
     for (var i in itemsToSelect) {
       if (!_isSelectedItem(i) /*check if the item is already selected*/ &&
           !_isDisabled(i) /*escape disabled items*/) {
         newSelectedItems.add(i);
-        if (widget.popupProps.onItemAdded != null) {
-          widget.popupProps.onItemAdded!(_selectedItems, i);
+        if (popupProps.onItemAdded != null) {
+          popupProps.onItemAdded!(_selectedItems, i);
         }
       }
     }
@@ -718,13 +730,14 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   }
 
   void deselectItems(List<T> itemsToDeselect) {
+    var popupProps = widget.popupProps;
     List<T> newSelectedItems = _selectedItems;
     for (var i in itemsToDeselect) {
       var index = _itemIndexInList(newSelectedItems, i);
       if (index > -1) /*check if the item is already selected*/ {
         newSelectedItems.removeAt(index);
-        if (widget.popupProps.onItemRemoved != null) {
-          widget.popupProps.onItemRemoved!(_selectedItems, i);
+        if (popupProps.onItemRemoved != null) {
+          popupProps.onItemRemoved!(_selectedItems, i);
         }
       }
     }
@@ -735,8 +748,9 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
     deselectItems(_cachedItems);
   }
 
-  bool get isAllItemSelected =>
-      _selectedItems.length >= _currentShowedItems.length;
+  bool get isAllItemSelected {
+    return _selectedItems.length >= _currentShowedItems.length;
+  }
 
   List<T> get getSelectedItem => List.from(_selectedItems);
 }
