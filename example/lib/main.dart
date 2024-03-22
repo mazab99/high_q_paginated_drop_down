@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         ),
         body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.all(20),
           children: [
             // const SizedBox(height: 20),
             // BasicPaginatedSearchDropdown<Anime>.paginated(
@@ -228,22 +228,12 @@ class MyApp extends StatelessWidget {
                       width: 0.5,
                     ),
                   ),
-                  hintText: 'choose',
+                  hintText: 'Types',
                   contentPadding: const EdgeInsets.all(10),
                 ),
                 textAlign: TextAlign.start,
               ),
               popupProps: PopupPropsMultiSelection.menu(
-                title: const Column(
-                  children: [
-                    SizedBox(height: 15),
-                    Text(
-                      'choose',
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                ),
                 loadingBuilder: (context, searchEntry) {
                   return const CircularProgressIndicator();
                 },
@@ -254,6 +244,7 @@ class MyApp extends StatelessWidget {
                 isFilterOnline: true,
                 fit: FlexFit.loose,
                 showSearchBox: true,
+
                 textFieldOnChanged: (value) {
                   if (kDebugMode) {
                     print(value);
@@ -269,6 +260,31 @@ class MyApp extends StatelessWidget {
                         _userEditTextController.clear();
                       },
                     ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    hintText: 'Choose'
                   ),
                 ),
               ),
@@ -298,6 +314,7 @@ class MyApp extends StatelessWidget {
                       side: const BorderSide(color: Colors.green),
                     ),
                   ),
+                  minimumSize: MaterialStateProperty.all(const Size(double.infinity,30,),),
                 ),
               ),
               validatorProps: ValidatorProps(
