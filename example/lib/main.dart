@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           backgroundColor: Colors.red,
+          centerTitle: true,
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -189,6 +190,7 @@ class MyApp extends StatelessWidget {
             // ),
             // const SizedBox(height: 50),
             MultiSelectDropDown<String>(
+              key: UniqueKey(),
               itemsLogicProps: ItemsLogicProps(
                 items: const [
                   "Story-time",
@@ -328,26 +330,26 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
 
-  Future<AnimePaginatedList?> getAnimeList({
-    required int page,
-    Map<String, dynamic>? queryParameters,
-  }) async {
-    try {
-      String url = "https://api.jikan.moe/v4/anime";
+Future<AnimePaginatedList?> getAnimeList({
+  required int page,
+  Map<String, dynamic>? queryParameters,
+}) async {
+  try {
+    String url = "https://api.jikan.moe/v4/anime";
 
-      Response<dynamic> response = await Dio()
-          .get(
-        url,
-        queryParameters: queryParameters,
-      )
-          .then((value) {
-        return value;
-      });
-      if (response.statusCode != 200) throw Exception(response.statusMessage);
-      return AnimePaginatedList.fromJson(response.data);
-    } catch (exception) {
-      throw Exception(exception);
-    }
+    Response<dynamic> response = await Dio()
+        .get(
+      url,
+      queryParameters: queryParameters,
+    )
+        .then((value) {
+      return value;
+    });
+    if (response.statusCode != 200) throw Exception(response.statusMessage);
+    return AnimePaginatedList.fromJson(response.data);
+  } catch (exception) {
+    throw Exception(exception);
   }
 }
