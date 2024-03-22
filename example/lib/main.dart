@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
           centerTitle: true,
         ),
         body: ListView(
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
             //         child: Text(
             //           e.title ?? '',
             //           style: const TextStyle(
-            //             color: Colors.red,
+            //             color: Colors.green,
             //             fontSize: 5,
             //           ),
             //         ),
@@ -117,7 +117,7 @@ class MyApp extends StatelessWidget {
             //   requestItemCount: 25,
             //   width: 10,
             //   loadingWidget: const CircularProgressIndicator(
-            //     color: Colors.red,
+            //     color: Colors.green,
             //   ),
             //   backgroundDecoration: (child) {
             //     return InputDecorator(
@@ -168,17 +168,17 @@ class MyApp extends StatelessWidget {
             //   hasTrailingClearIcon: true,
             //   trailingIcon: const Icon(
             //     Icons.arrow_circle_down_outlined,
-            //     color: Colors.red,
+            //     color: Colors.green,
             //   ),
             //   searchHintText: 'Hi search for any thing',
             //   trailingClearIcon: const Icon(
             //     Icons.delete,
-            //     color: Colors.red,
+            //     color: Colors.green,
             //   ),
             //   searchDelayDuration: const Duration(milliseconds: 800),
             //   leadingIcon: const Icon(
             //     Icons.language,
-            //     color: Colors.red,
+            //     color: Colors.green,
             //   ),
             //   spaceBetweenDropDownAndItemsDialog: 10,
             //   isEnabled: true,
@@ -210,23 +210,36 @@ class MyApp extends StatelessWidget {
                 compareFn: (item1, item2) => item1 == item2,
                 filterFn: (item, filter) => true,
                 filterIcon: const Icon(
-                  Icons.add,
-                  color: Colors.red,
+                  Icons.arrow_drop_down,
+                  color: Colors.green,
                 ),
               ),
               dropdownDecorator: DropDownDecoratorProps(
                 textAlignVertical: TextAlignVertical.center,
                 multiSelectDropDownDecoration: InputDecoration(
-                  icon: const Icon(
-                    Icons.local_activity_outlined,
-                    color: Colors.red,
-                  ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
                     borderSide: const BorderSide(
-                      color: Colors.greenAccent,
-                      width: 0.5,
+                      color: Colors.green,
                     ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.green,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.green,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   hintText: 'Types',
                   contentPadding: const EdgeInsets.all(10),
@@ -238,7 +251,7 @@ class MyApp extends StatelessWidget {
                   return const CircularProgressIndicator();
                 },
                 scrollbarProps: const ScrollbarProps(
-                  thumbColor: Colors.red,
+                  thumbColor: Colors.green,
                   thickness: 3,
                 ),
                 isFilterOnline: true,
@@ -262,25 +275,25 @@ class MyApp extends StatelessWidget {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        color: Colors.red,
+                        color: Colors.green,
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        color: Colors.red,
+                        color: Colors.green,
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        color: Colors.red,
+                        color: Colors.green,
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        color: Colors.red,
+                        color: Colors.green,
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),

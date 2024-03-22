@@ -39,14 +39,14 @@ class MultiSelectDropDown<T> extends StatefulWidget {
     this.validatorProps = const ValidatorProps(),
     this.filterAndCompareProps = const FilterAndCompareProps(),
     this.popupProps = const PopupPropsMultiSelection.menu(),
-    this.methodLogicProps=const MethodLogicProps(),
+    this.methodLogicProps = const MethodLogicProps(),
     this.enabled = true,
   })  : assert(
           !popupProps.showSelectedItems ||
               T == String ||
               filterAndCompareProps.compareFn != null,
         ),
-        onChanged = methodLogicProps!.onChanged,
+        onChanged = methodLogicProps.onChanged,
         textFieldOnChanged = popupProps.textFieldOnChanged,
         onBeforePopupOpeningMultiSelection =
             methodLogicProps.onBeforePopupOpening,
@@ -63,12 +63,12 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
   final _popupStateKey = GlobalKey<SelectionWidgetState<T>>();
 
-
   @override
   void initState() {
     super.initState();
-    _selectedItemsNotifier.value =
-        List.from(widget.itemsLogicProps.initialSelectedItems,);
+    _selectedItemsNotifier.value = List.from(
+      widget.itemsLogicProps.initialSelectedItems,
+    );
   }
 
   @override
@@ -171,7 +171,6 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
 
     return selectedItemWidget();
   }
-
 
   Widget _formField() {
     return _formFieldMultiSelection();
@@ -338,17 +337,13 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
       asyncItems: widget.itemsLogicProps.asyncItems,
       defaultSelectedItems: List.from(getSelectedItems),
       popupProps: widget.popupProps,
-
-      filterFn: widget.filterAndCompareProps.filterFn,
-
       confirmText: widget.confirmButtonProps.confirmText,
       confirmButtonStyle: widget.confirmButtonProps.confirmButtonStyle,
       confirmTextTextStyle: widget.confirmButtonProps.confirmTextTextStyle,
       confirmButtonPadding: widget.confirmButtonProps.confirmButtonPadding,
-
       onChanged: _handleOnChangeSelectedItems,
       compareFn: widget.filterAndCompareProps.compareFn,
-
+      filterFn: widget.filterAndCompareProps.filterFn,
     );
   }
 
@@ -370,6 +365,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
 
     _handleFocus(false);
   }
+
   List<T> parseNewValue(String newValue) {
     List<String> parts = newValue.split(',');
     List<T> newItems = parts.map((part) => parsePart(part)).toList();
@@ -379,6 +375,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   T parsePart(String part) {
     return part as T;
   }
+
   bool _isEqual(T i1, T i2) {
     if (widget.filterAndCompareProps.compareFn != null) {
       return widget.filterAndCompareProps.compareFn!(i1, i2);
