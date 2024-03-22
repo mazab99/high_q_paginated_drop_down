@@ -5,69 +5,53 @@ import 'package:paginated_search_drop_down/src/properties/popup_props.dart';
 import 'package:paginated_search_drop_down/src/utils/typedefs.dart';
 import 'package:paginated_search_drop_down/src/widgets/popup_menu.dart';
 import 'package:paginated_search_drop_down/src/widgets/selection_widget.dart';
+import 'properties/confirm_button_props.dart';
+import 'properties/filter_props.dart';
+import 'properties/items_logic_props.dart';
+import 'properties/methods_logic_props.dart';
+import 'properties/selected_item_decoration_pros.dart';
+import 'properties/validator_props.dart';
 
 class MultiSelectDropDown<T> extends StatefulWidget {
-  final List<T> items;
-  final List<T> selectedItems;
-  final MultiSelectDropDownOnFind<T>? asyncItems;
-  final ValueChanged<List<T>>? onChangedMultiSelection;
-  final MultiSelectDropDownItemAsString<T>? itemAsString;
-  final MultiSelectDropDownFilterFn<T>? filterFn;
-  final bool enabled;
-  final Widget removeItemWidget;
-  final EdgeInsets removeItemWidgetPadding;
-  final TextStyle? selectedItemTextStyle;
-  final String? confirmText;
-  final ButtonStyle? confirmButtonStyle;
-  final TextStyle? confirmTextTextStyle;
-  final MultiSelectDropDownCompareFn<T>? compareFn;
-  final AutovalidateMode? autoValidateMode;
-  final FormFieldSetter<List<T>>? onSavedMultiSelection;
-  final FormFieldValidator<List<T>>? validatorMultiSelection;
-  final BeforeChangeMultiSelection<T>? onBeforeChangeMultiSelection;
-  final bool isMultiSelectionMode;
+  final ItemsLogicProps<T> itemsLogicProps;
+  final FilterAndCompareProps<T> filterAndCompareProps;
+  final DropDownDecoratorProps dropdownDecorator;
+  final SelectedItemDecorationPros selectedItemDecorationPros;
+  final ConfirmButtonProps confirmButtonProps;
+  final ValidatorProps<T> validatorProps;
   final PopupPropsMultiSelection<T> popupProps;
+  final MethodLogicProps<T> methodLogicProps;
+
+  final ValueChanged<List<T>>? onChanged;
+  final FormFieldSetter<List<T>>? onSavedMultiSelection;
+  final BeforeChangeMultiSelection<T>? onBeforeChangeMultiSelection;
   final Function(String)? textFieldOnChanged;
-  final DropDownDecoratorProps dropdownDecoratorProps;
-  final BeforePopupOpening<T>? onBeforePopupOpening;
   final BeforePopupOpeningMultiSelection<T>? onBeforePopupOpeningMultiSelection;
 
+  final bool enabled;
 
   MultiSelectDropDown({
     Key? key,
-    this.autoValidateMode = AutovalidateMode.disabled,
-    this.items = const [],
-    this.asyncItems,
-    this.selectedItemTextStyle,
-    this.removeItemWidgetPadding = EdgeInsets.zero,
-    required this.removeItemWidget,
-    this.textFieldOnChanged,
-    this.confirmText,
-    this.confirmButtonStyle,
-    this.confirmTextTextStyle,
-    this.dropdownDecoratorProps = const DropDownDecoratorProps(),
-    this.enabled = true,
-    this.filterFn,
-    this.itemAsString,
-    this.compareFn,
-    this.selectedItems = const [],
+    this.dropdownDecorator = const DropDownDecoratorProps(),
+    this.confirmButtonProps = const ConfirmButtonProps(),
+    this.selectedItemDecorationPros = const SelectedItemDecorationPros(),
+    this.itemsLogicProps = const ItemsLogicProps(),
+    this.validatorProps = const ValidatorProps(),
+    this.filterAndCompareProps = const FilterAndCompareProps(),
     this.popupProps = const PopupPropsMultiSelection.menu(),
-    FormFieldSetter<List<T>>? onSaved,
-    ValueChanged<List<T>>? onChanged,
-    BeforeChangeMultiSelection<T>? onBeforeChange,
-    BeforePopupOpeningMultiSelection<T>? onBeforePopupOpening,
-    FormFieldValidator<List<T>>? validator,
+    this.methodLogicProps=const MethodLogicProps(),
+    this.enabled = true,
   })  : assert(
-  !popupProps.showSelectedItems || T == String || compareFn != null,
-  ),
-        onChangedMultiSelection = onChanged,
-        onBeforePopupOpeningMultiSelection = onBeforePopupOpening,
-        onSavedMultiSelection = onSaved,
-        onBeforeChangeMultiSelection = onBeforeChange,
-        validatorMultiSelection = validator,
-
-        isMultiSelectionMode = true,
-        onBeforePopupOpening = null,
+          !popupProps.showSelectedItems ||
+              T == String ||
+              filterAndCompareProps.compareFn != null,
+        ),
+        onChanged = methodLogicProps!.onChanged,
+        textFieldOnChanged = popupProps.textFieldOnChanged,
+        onBeforePopupOpeningMultiSelection =
+            methodLogicProps.onBeforePopupOpening,
+        onSavedMultiSelection = methodLogicProps.onSaved,
+        onBeforeChangeMultiSelection = methodLogicProps.onBeforeChange,
         super(key: key);
 
   @override
@@ -79,17 +63,19 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
   final _popupStateKey = GlobalKey<SelectionWidgetState<T>>();
 
+
   @override
   void initState() {
     super.initState();
-    _selectedItemsNotifier.value = List.from(widget.selectedItems);
+    _selectedItemsNotifier.value =
+        List.from(widget.itemsLogicProps.initialSelectedItems,);
   }
 
   @override
   void didUpdateWidget(MultiSelectDropDown<T> oldWidget) {
-    List<T> oldSelectedItems = oldWidget.selectedItems;
+    List<T> oldSelectedItems = oldWidget.itemsLogicProps.initialSelectedItems;
 
-    List<T> newSelectedItems = widget.selectedItems;
+    List<T> newSelectedItems = widget.itemsLogicProps.initialSelectedItems;
 
     if (!listEquals(oldSelectedItems, newSelectedItems)) {
       _selectedItemsNotifier.value = List.from(newSelectedItems);
@@ -131,31 +117,43 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   Widget _defaultSelectedItemWidget() {
     Widget defaultItemMultiSelectionMode(T item) {
       return Container(
-        padding: EdgeInsets.only(left: 8, right: 1),
-        margin: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).primaryColorLight,
-        ),
+        padding: widget.selectedItemDecorationPros.selectedItemBoxPadding ??
+            EdgeInsets.only(left: 8, right: 1),
+        margin: widget.selectedItemDecorationPros.selectedItemBoxMargin ??
+            EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+        decoration:
+            widget.selectedItemDecorationPros.selectedItemBoxDecoration ??
+                BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).primaryColorLight,
+                ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: Text(
-                _selectedItemAsString(item),
-                style: widget.selectedItemTextStyle ??
-                    Theme.of(context).textTheme.titleSmall,
-                overflow: TextOverflow.ellipsis,
+              child: Padding(
+                padding:
+                    widget.selectedItemDecorationPros.selectedItemTextPadding ??
+                        EdgeInsets.zero,
+                child: Text(
+                  _selectedItemAsString(item),
+                  style:
+                      widget.selectedItemDecorationPros.selectedItemTextStyle ??
+                          Theme.of(context).textTheme.titleSmall,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             Padding(
-              padding: widget.removeItemWidgetPadding,
+              padding:
+                  widget.selectedItemDecorationPros.removeItemWidgetPadding ??
+                      EdgeInsets.zero,
               child: GestureDetector(
                 onTap: () {
                   removeItem(item);
                 },
-                child: widget.removeItemWidget,
+                child: widget.selectedItemDecorationPros.removeItemWidget,
               ),
             ),
           ],
@@ -164,38 +162,28 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
     }
 
     Widget selectedItemWidget() {
-      if (isMultiSelectionMode) {
-        return Wrap(
-          children: getSelectedItems
-              .map((e) => defaultItemMultiSelectionMode(e))
-              .toList(),
-        );
-      }
-      return Text(
-        _selectedItemAsString(getSelectedItem),
-        style: widget.dropdownDecoratorProps.baseStyle,
-        textAlign: widget.dropdownDecoratorProps.textAlign,
+      return Wrap(
+        children: getSelectedItems
+            .map((e) => defaultItemMultiSelectionMode(e))
+            .toList(),
       );
     }
 
-
-
     return selectedItemWidget();
   }
+
 
   Widget _formField() {
     return _formFieldMultiSelection();
   }
 
-
-
   Widget _formFieldMultiSelection() {
     return FormField<List<T>>(
       enabled: widget.enabled,
       onSaved: widget.onSavedMultiSelection,
-      validator: widget.validatorMultiSelection,
-      autovalidateMode: widget.autoValidateMode,
-      initialValue: widget.selectedItems,
+      validator: widget.validatorProps.validator,
+      autovalidateMode: widget.validatorProps.autoValidateMode,
+      initialValue: widget.itemsLogicProps.initialSelectedItems,
       builder: (FormFieldState<List<T>> state) {
         if (state.value != getSelectedItems) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -205,47 +193,46 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
           });
         }
         return ValueListenableBuilder<bool>(
-            valueListenable: _isFocused,
-            builder: (context, isFocused, w) {
-              return InputDecorator(
-                baseStyle: widget.dropdownDecoratorProps.baseStyle,
-                textAlign: widget.dropdownDecoratorProps.textAlign,
-                textAlignVertical:
-                widget.dropdownDecoratorProps.textAlignVertical,
-                isEmpty: getSelectedItems.isEmpty,
-                isFocused: isFocused,
-                decoration: _manageDropdownDecoration(state),
-                child: _defaultSelectedItemWidget(),
-              );
-            });
+          valueListenable: _isFocused,
+          builder: (context, isFocused, w) {
+            return InputDecorator(
+              baseStyle: widget.dropdownDecorator.baseStyle,
+              textAlign: widget.dropdownDecorator.textAlign,
+              textAlignVertical: widget.dropdownDecorator.textAlignVertical,
+              isEmpty: getSelectedItems.isEmpty,
+              isFocused: isFocused,
+              decoration: _manageDropdownDecoration(state),
+              child: _defaultSelectedItemWidget(),
+            );
+          },
+        );
       },
     );
   }
 
   InputDecoration _manageDropdownDecoration(FormFieldState state) {
-    return (widget.dropdownDecoratorProps.multiSelectDropDownDecoration ??
-        const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-          border: OutlineInputBorder(),
-        ))
+    return (widget.dropdownDecorator.multiSelectDropDownDecoration ??
+            const InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+              border: OutlineInputBorder(),
+            ))
         .applyDefaults(Theme.of(state.context).inputDecorationTheme)
         .copyWith(
-      enabled: widget.enabled,
-      suffixIcon: Icon(Icons.abc_outlined),
-      errorText: state.errorText,
-    );
+          enabled: widget.enabled,
+          suffixIcon: widget.filterAndCompareProps.filterIcon,
+          errorText: state.errorText,
+        );
   }
 
   String _selectedItemAsString(T? data) {
     if (data == null) {
       return "";
-    } else if (widget.itemAsString != null) {
-      return widget.itemAsString!(data);
+    } else if (widget.itemsLogicProps.itemAsString != null) {
+      return widget.itemsLogicProps.itemAsString!(data);
     } else {
       return data.toString();
     }
   }
-
 
   RelativeRect _position(RenderBox popupButtonObject, RenderBox overlay) {
     return RelativeRect.fromSize(
@@ -268,7 +255,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
       barrierLabel: widget.popupProps.dialogProps.barrierLabel,
       transitionDuration: widget.popupProps.dialogProps.transitionDuration,
       barrierColor:
-      widget.popupProps.dialogProps.barrierColor ?? Colors.black54,
+          widget.popupProps.dialogProps.barrierColor ?? Colors.black54,
       useRootNavigator: widget.popupProps.dialogProps.useRootNavigator,
       anchorPoint: widget.popupProps.dialogProps.anchorPoint,
       transitionBuilder: widget.popupProps.dialogProps.transitionBuilder,
@@ -276,13 +263,13 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
         return AlertDialog(
           buttonPadding: widget.popupProps.dialogProps.buttonPadding,
           actionsOverflowButtonSpacing:
-          widget.popupProps.dialogProps.actionsOverflowButtonSpacing,
+              widget.popupProps.dialogProps.actionsOverflowButtonSpacing,
           insetPadding: widget.popupProps.dialogProps.insetPadding,
           actionsPadding: widget.popupProps.dialogProps.actionsPadding,
           actionsOverflowDirection:
-          widget.popupProps.dialogProps.actionsOverflowDirection,
+              widget.popupProps.dialogProps.actionsOverflowDirection,
           actionsOverflowAlignment:
-          widget.popupProps.dialogProps.actionsOverflowAlignment,
+              widget.popupProps.dialogProps.actionsOverflowAlignment,
           actionsAlignment: widget.popupProps.dialogProps.actionsAlignment,
           actions: widget.popupProps.dialogProps.actions,
           alignment: widget.popupProps.dialogProps.alignment,
@@ -305,22 +292,22 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
       useSafeArea: widget.popupProps.modalBottomSheetProps.useSafeArea,
       barrierColor: widget.popupProps.modalBottomSheetProps.barrierColor,
       backgroundColor:
-      widget.popupProps.modalBottomSheetProps.backgroundColor ??
-          sheetTheme.modalBackgroundColor ??
-          sheetTheme.backgroundColor ??
-          Colors.white,
+          widget.popupProps.modalBottomSheetProps.backgroundColor ??
+              sheetTheme.modalBackgroundColor ??
+              sheetTheme.backgroundColor ??
+              Colors.white,
       isDismissible: widget.popupProps.modalBottomSheetProps.barrierDismissible,
       isScrollControlled:
-      widget.popupProps.modalBottomSheetProps.isScrollControlled,
+          widget.popupProps.modalBottomSheetProps.isScrollControlled,
       enableDrag: widget.popupProps.modalBottomSheetProps.enableDrag,
       clipBehavior: widget.popupProps.modalBottomSheetProps.clipBehavior,
       elevation: widget.popupProps.modalBottomSheetProps.elevation,
       shape: widget.popupProps.modalBottomSheetProps.shape,
       anchorPoint: widget.popupProps.modalBottomSheetProps.anchorPoint,
       useRootNavigator:
-      widget.popupProps.modalBottomSheetProps.useRootNavigator,
+          widget.popupProps.modalBottomSheetProps.useRootNavigator,
       transitionAnimationController:
-      widget.popupProps.modalBottomSheetProps.animation,
+          widget.popupProps.modalBottomSheetProps.animation,
       constraints: widget.popupProps.modalBottomSheetProps.constraints,
       builder: (ctx) => _popupWidgetInstance(),
     );
@@ -346,18 +333,16 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   Widget _popupWidgetInstance() {
     return SelectionWidget<T>(
       key: _popupStateKey,
-      textFieldOnChanged: widget.textFieldOnChanged,
       popupProps: widget.popupProps,
-      itemAsString: widget.itemAsString,
-      filterFn: widget.filterFn,
-      confirmText: widget.confirmText,
-      items: widget.items,
-      confirmButtonStyle: widget.confirmButtonStyle,
-      confirmTextTextStyle: widget.confirmTextTextStyle,
-      asyncItems: widget.asyncItems,
+      itemAsString: widget.itemsLogicProps.itemAsString,
+      filterFn: widget.filterAndCompareProps.filterFn,
+      confirmText: widget.confirmButtonProps.confirmText,
+      items: widget.itemsLogicProps.items,
+      confirmButtonStyle: widget.confirmButtonProps.confirmButtonStyle,
+      confirmTextTextStyle: widget.confirmButtonProps.confirmTextTextStyle,
+      asyncItems: widget.itemsLogicProps.asyncItems,
       onChanged: _handleOnChangeSelectedItems,
-      compareFn: widget.compareFn,
-      isMultiSelectionMode: isMultiSelectionMode,
+      compareFn: widget.filterAndCompareProps.compareFn,
       defaultSelectedItems: List.from(getSelectedItems),
     );
   }
@@ -374,26 +359,31 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   void _handleOnChangeSelectedItems(List<T> selectedItems) {
     _selectedItemsNotifier.value = List.from(selectedItems);
 
-    if (widget.onChangedMultiSelection != null) {
-      widget.onChangedMultiSelection!(selectedItems);
+    if (widget.onChanged != null) {
+      widget.onChanged!(selectedItems);
     }
 
     _handleFocus(false);
   }
+  List<T> parseNewValue(String newValue) {
+    List<String> parts = newValue.split(',');
+    List<T> newItems = parts.map((part) => parsePart(part)).toList();
+    return newItems;
+  }
 
-
+  T parsePart(String part) {
+    return part as T;
+  }
   bool _isEqual(T i1, T i2) {
-    if (widget.compareFn != null) {
-      return widget.compareFn!(i1, i2);
+    if (widget.filterAndCompareProps.compareFn != null) {
+      return widget.filterAndCompareProps.compareFn!(i1, i2);
     } else {
       return i1 == i2;
     }
   }
 
   Future<void> _selectSearchMode() async {
-    if (widget.onBeforePopupOpening != null) {
-      if (await widget.onBeforePopupOpening!(getSelectedItem) == false) return;
-    } else if (widget.onBeforePopupOpeningMultiSelection != null) {
+    if (widget.onBeforePopupOpeningMultiSelection != null) {
       if (await widget.onBeforePopupOpeningMultiSelection!(getSelectedItems) ==
           false) return;
     }
@@ -427,8 +417,6 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   List<T> get getSelectedItems => _selectedItemsNotifier.value;
 
   bool get isFocused => _isFocused.value;
-
-  bool get isMultiSelectionMode => widget.isMultiSelectionMode;
 
   void popupDeselectItems(List<T> itemsToDeselect) {
     _popupStateKey.currentState?.deselectItems(itemsToDeselect);

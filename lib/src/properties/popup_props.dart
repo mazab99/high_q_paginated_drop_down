@@ -12,7 +12,7 @@ class PopupProps<T> {
   final Widget? title;
 
   final bool showSearchBox;
-
+  final Function(String)? textFieldOnChanged;
   final MultiSelectDropDownPopupItemBuilder<T>? itemBuilder;
 
   final TextFieldProps searchFieldProps;
@@ -61,6 +61,7 @@ class PopupProps<T> {
     this.mode = Mode.menu,
     this.fit = FlexFit.tight,
     this.title,
+    this.textFieldOnChanged,
     this.showSearchBox = false,
     //this.bottomSheetProps = const BottomSheetProps(),
     this.dialogProps = const DialogProps(),
@@ -96,6 +97,7 @@ class PopupProps<T> {
     this.searchDelay = const Duration(seconds: 1),
     this.onDismissed,
     this.emptyBuilder,
+    this.textFieldOnChanged,
     this.itemBuilder,
     this.errorBuilder,
     this.loadingBuilder,
@@ -113,6 +115,7 @@ class PopupProps<T> {
   const PopupProps.dialog({
     this.fit = FlexFit.tight,
     this.title,
+    this.textFieldOnChanged,
     this.showSearchBox = false,
     this.dialogProps = const DialogProps(),
     this.searchFieldProps = const TextFieldProps(),
@@ -152,6 +155,7 @@ class PopupProps<T> {
     this.searchDelay = const Duration(seconds: 1),
     this.onDismissed,
     this.emptyBuilder,
+    this.textFieldOnChanged,
     this.itemBuilder,
     this.errorBuilder,
     this.loadingBuilder,
@@ -187,6 +191,7 @@ class PopupPropsMultiSelection<T> extends PopupProps<T> {
     super.fit = FlexFit.tight,
     super.title,
     super.isFilterOnline,
+    super.textFieldOnChanged,
     super.itemBuilder,
     super.disabledItemFn,
     super.showSearchBox,
@@ -231,6 +236,7 @@ class PopupPropsMultiSelection<T> extends PopupProps<T> {
     super.loadingBuilder,
     super.showSelectedItems = false,
     super.disabledItemFn,
+    super.textFieldOnChanged,
     super.isFilterOnline = false,
     super.containerBuilder,
     super.constraints = const BoxConstraints(maxHeight: 350),

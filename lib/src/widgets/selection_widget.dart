@@ -11,13 +11,11 @@ class SelectionWidget<T> extends StatefulWidget {
   final List<T> items;
   final ValueChanged<List<T>>? onChanged;
   final MultiSelectDropDownOnFind<T>? asyncItems;
-  final Function(String)? textFieldOnChanged;
   final MultiSelectDropDownItemAsString<T>? itemAsString;
   final MultiSelectDropDownFilterFn<T>? filterFn;
   final MultiSelectDropDownCompareFn<T>? compareFn;
   final List<T> defaultSelectedItems;
   final PopupPropsMultiSelection<T> popupProps;
-  final bool isMultiSelectionMode;
   final String? confirmText;
   final ButtonStyle? confirmButtonStyle;
   final TextStyle? confirmTextTextStyle;
@@ -26,10 +24,8 @@ class SelectionWidget<T> extends StatefulWidget {
     Key? key,
     required this.popupProps,
     this.defaultSelectedItems = const [],
-    this.isMultiSelectionMode = false,
     this.items = const [],
     this.onChanged,
-    this.textFieldOnChanged,
     this.confirmTextTextStyle,
     this.asyncItems,
     this.confirmText,
@@ -51,7 +47,6 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   final ScrollController scrollController = ScrollController();
   final List<T> _currentShowedItems = [];
   late TextEditingController searchBoxController;
-
   List<T> get _selectedItems => _selectedItemsNotifier.value;
   Timer? _debounce;
 
@@ -66,13 +61,11 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   void initState() {
     super.initState();
     _selectedItemsNotifier.value = widget.defaultSelectedItems;
-
-    searchBoxController = widget.popupProps.searchFieldProps.controller ??
-        TextEditingController();
+    searchBoxController = widget.popupProps.searchFieldProps.controller ?? TextEditingController();
     searchBoxController.addListener(_searchBoxControllerListener);
     Future.delayed(
       Duration.zero,
-      () => _manageItemsByFilter(
+          () =>_manageItemsByFilter(
         searchBoxController.text,
         isFirstLoad: true,
       ),
@@ -82,8 +75,8 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   void _searchBoxControllerListener() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(widget.popupProps.searchDelay, () {
-      if (widget.textFieldOnChanged != null) {
-        widget.textFieldOnChanged!(searchBoxController.text);
+      if (widget.popupProps.textFieldOnChanged != null) {
+        widget.popupProps.textFieldOnChanged!(searchBoxController.text);
       }
       _manageItemsByFilter(searchBoxController.text);
     });
@@ -224,9 +217,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               var item = snapshot.data![index];
-                              return widget.isMultiSelectionMode
-                                  ? _itemWidgetMultiSelection(item)
-                                  : _itemWidgetSingleSelection(item);
+                              return _itemWidgetMultiSelection(item);
                             },
                           ),
                         );
@@ -252,7 +243,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   void closePopup() => Navigator.pop(context);
 
   Widget _multiSelectionValidation() {
-    if (!widget.isMultiSelectionMode) return SizedBox.shrink();
+    //if (!widget.isMultiSelectionMode) return SizedBox.shrink();
 
     Widget defaultValidation = Padding(
       padding: EdgeInsets.all(8),
@@ -271,7 +262,9 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
 
     if (widget.popupProps.validationWidgetBuilder != null) {
       return widget.popupProps.validationWidgetBuilder!(
-          context, _selectedItems);
+        context,
+        _selectedItems,
+      );
     }
 
     return defaultValidation;
@@ -355,11 +348,10 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
         });
   }
 
-  ///Function that filter item (online and offline) base on user filter
-  ///[filter] is the filter keyword
-  ///[isFirstLoad] true if it's the first time we load data from online, false other wises
-  Future<void> _manageItemsByFilter(String filter,
-      {bool isFirstLoad = false}) async {
+  Future<void> _manageItemsByFilter(
+    String filter, {
+    bool isFirstLoad = false,
+  }) async {
     _loadingNotifier.value = true;
 
     List<T> applyFilter(String filter) {
@@ -369,39 +361,28 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
         } else if (i.toString().toLowerCase().contains(filter.toLowerCase())) {
           return true;
         } else if (widget.itemAsString != null) {
-          return (widget.itemAsString!(i))
-              .toLowerCase()
-              .contains(filter.toLowerCase());
+          return (widget.itemAsString!(i)).toLowerCase().contains(
+                filter.toLowerCase(),
+              );
         }
         return false;
       }).toList();
     }
 
-    //load offline data for the first time
     if (isFirstLoad) _cachedItems.addAll(widget.items);
-
-    //manage offline items
     if (widget.asyncItems != null &&
         (widget.popupProps.isFilterOnline || isFirstLoad)) {
       try {
         final List<T> onlineItems = [];
         onlineItems.addAll(await widget.asyncItems!(filter));
-
-        //Remove all old data
         _cachedItems.clear();
-        //add offline items
         _cachedItems.addAll(widget.items);
-        //if filter online we filter only local list based on entered keyword (filter)
         if (widget.popupProps.isFilterOnline == true) {
           var filteredLocalList = applyFilter(filter);
           _cachedItems.clear();
           _cachedItems.addAll(filteredLocalList);
         }
-
-        //add new online items to list
         _cachedItems.addAll(onlineItems);
-
-        //don't filter data , they are already filtered online and local data are already filtered
         if (widget.popupProps.isFilterOnline == true) {
           _addDataToStream(_cachedItems);
         } else {
@@ -409,8 +390,6 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
         }
       } catch (e) {
         _addErrorToStream(e);
-        //if offline items count > 0 , the error will be not visible for the user
-        //As solution we show it in dialog
         if (widget.items.isNotEmpty) {
           _showErrorDialog(e);
           _addDataToStream(applyFilter(filter));
@@ -426,8 +405,6 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   void _addDataToStream(List<T> data) {
     if (_itemsStream.isClosed) return;
     _itemsStream.add(data);
-
-    //update showed data list
     _currentShowedItems.clear();
     _currentShowedItems.addAll(data);
   }
@@ -532,7 +509,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
                       DoNothingAndStopPropagationTextIntent(),
                 },
                 child: TextField(
-                  onChanged: widget.textFieldOnChanged,
+                  //onChanged: widget.popupProps.textFieldOnChanged,
                   enableIMEPersonalizedLearning: widget.popupProps
                       .searchFieldProps.enableIMEPersonalizedLearning,
                   clipBehavior: widget.popupProps.searchFieldProps.clipBehavior,
@@ -673,24 +650,17 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   }
 
   void _handleSelectedItem(T newSelectedItem) {
-    if (widget.isMultiSelectionMode) {
-      if (_isSelectedItem(newSelectedItem)) {
-        _selectedItemsNotifier.value = List.from(_selectedItems)
-          ..removeWhere((i) => _isEqual(newSelectedItem, i));
-        if (widget.popupProps.onItemRemoved != null) {
-          widget.popupProps.onItemRemoved!(_selectedItems, newSelectedItem);
-        }
-      } else {
-        _selectedItemsNotifier.value = List.from(_selectedItems)
-          ..add(newSelectedItem);
-        if (widget.popupProps.onItemAdded != null) {
-          widget.popupProps.onItemAdded!(_selectedItems, newSelectedItem);
-        }
+    if (_isSelectedItem(newSelectedItem)) {
+      _selectedItemsNotifier.value = List.from(_selectedItems)
+        ..removeWhere((i) => _isEqual(newSelectedItem, i));
+      if (widget.popupProps.onItemRemoved != null) {
+        widget.popupProps.onItemRemoved!(_selectedItems, newSelectedItem);
       }
     } else {
-      closePopup();
-      if (widget.onChanged != null) {
-        widget.onChanged!(List.filled(1, newSelectedItem));
+      _selectedItemsNotifier.value = List.from(_selectedItems)
+        ..add(newSelectedItem);
+      if (widget.popupProps.onItemAdded != null) {
+        widget.popupProps.onItemAdded!(_selectedItems, newSelectedItem);
       }
     }
   }
