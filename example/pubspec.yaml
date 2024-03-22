@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  paginated_search_drop_down:
+  high_q_paginated_drop_down:
     path: ../
   dio: ^5.4.0
 

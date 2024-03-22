@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/extensions/context_extension.dart';
-import 'package:paginated_search_drop_down/src/extensions/global_paint_bounds.dart';
-import 'package:paginated_search_drop_down/src/utils/package_inkwell_widget.dart';
-import 'package:paginated_search_drop_down/src/utils/package_search_bar.dart';
+import 'package:high_q_paginated_drop_down/src/extensions/context_extension.dart';
+import 'package:high_q_paginated_drop_down/src/extensions/global_paint_bounds.dart';
+import 'package:high_q_paginated_drop_down/src/utils/package_inkwell_widget.dart';
+import 'package:high_q_paginated_drop_down/src/utils/package_search_bar.dart';
 import '../high_q_paginated_drop_down.dart';
 
 class HighQPaginatedDropdown<T> extends StatefulWidget {

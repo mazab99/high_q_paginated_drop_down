@@ -2,7 +2,7 @@ import 'package:example/pagination_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:paginated_search_drop_down/high_q_paginated_drop_down.dart';
+import 'package:high_q_paginated_drop_down/high_q_paginated_drop_down.dart';
 
 void main() {
   runApp(MyApp());
@@ -189,7 +189,7 @@ class MyApp extends StatelessWidget {
               noRecordText: const Text('HJKHJKHJKLJKJH'),
             ),
             const SizedBox(height: 50),
-            MultiSelectDropDown<String>(
+            HighQMultiSelectDropDown<String>(
               key: UniqueKey(),
               enabled: true,
               itemsLogicProps: ItemsLogicProps(
@@ -209,7 +209,8 @@ class MyApp extends StatelessWidget {
               ),
               filterAndCompareProps: FilterAndCompareProps(
                 compareFn: (item1, item2) => item1 == item2,
-                filterFn: (item, filter) => item.toLowerCase().contains(filter.toLowerCase()),
+                filterFn: (item, filter) =>
+                    item.toLowerCase().contains(filter.toLowerCase()),
                 filterIcon: const Icon(
                   Icons.arrow_drop_down,
                   color: Colors.green,
@@ -258,7 +259,6 @@ class MyApp extends StatelessWidget {
                 isFilterOnline: true,
                 fit: FlexFit.loose,
                 showSearchBox: true,
-
                 textFieldOnChanged: (value) {
                   if (kDebugMode) {
                     print(value);
@@ -268,38 +268,37 @@ class MyApp extends StatelessWidget {
                 searchFieldProps: TextFieldProps(
                   controller: _userEditTextController,
                   decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _userEditTextController.clear();
-                      },
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.green,
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _userEditTextController.clear();
+                        },
                       ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.green,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.green,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.green,
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    hintText: 'Choose'
-                  ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      hintText: 'Choose'),
                 ),
               ),
               selectedItemDecorationPros: SelectedItemDecorationPros(
@@ -314,7 +313,11 @@ class MyApp extends StatelessWidget {
                 removeItemWidgetPadding: const EdgeInsets.all(5),
                 selectedItemTextPadding: const EdgeInsets.all(5),
                 selectedItemBoxMargin: const EdgeInsets.all(5),
-                selectedItemTextStyle: const TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.w900,),
+                selectedItemTextStyle: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
               confirmButtonProps: ConfirmButtonProps(
                 confirmText: 'done',
@@ -327,7 +330,12 @@ class MyApp extends StatelessWidget {
                       side: const BorderSide(color: Colors.green),
                     ),
                   ),
-                  minimumSize: MaterialStateProperty.all(const Size(double.infinity,30,),),
+                  minimumSize: MaterialStateProperty.all(
+                    const Size(
+                      double.infinity,
+                      30,
+                    ),
+                  ),
                 ),
                 confirmButtonPadding: const EdgeInsets.all(8),
               ),

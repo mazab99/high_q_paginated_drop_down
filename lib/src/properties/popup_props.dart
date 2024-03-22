@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/properties/scrollbar_props.dart';
-import 'package:paginated_search_drop_down/src/properties/text_field_props.dart';
+import 'package:high_q_paginated_drop_down/src/properties/scrollbar_props.dart';
+import 'package:high_q_paginated_drop_down/src/properties/text_field_props.dart';
 import '../utils/typedefs.dart';
 import 'dialog_props.dart';
 import 'favorite_item_props.dart';

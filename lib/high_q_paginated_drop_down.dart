@@ -1,4 +1,4 @@
-library paginated_search_drop_down;
+library high_q_paginated_drop_down;
 export 'src/model/menu_item_model.dart';
 export 'src/high_q_paginated_drop_down.dart';
 export 'src/high_q_paginated_drop_down_controller.dart';

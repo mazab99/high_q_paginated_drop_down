@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/properties/dropdown_decorator_props.dart';
-import 'package:paginated_search_drop_down/src/properties/popup_props.dart';
-import 'package:paginated_search_drop_down/src/utils/typedefs.dart';
-import 'package:paginated_search_drop_down/src/widgets/popup_menu.dart';
-import 'package:paginated_search_drop_down/src/widgets/selection_widget.dart';
+import 'package:high_q_paginated_drop_down/src/properties/dropdown_decorator_props.dart';
+import 'package:high_q_paginated_drop_down/src/properties/popup_props.dart';
+import 'package:high_q_paginated_drop_down/src/utils/typedefs.dart';
+import 'package:high_q_paginated_drop_down/src/widgets/popup_menu.dart';
+import 'package:high_q_paginated_drop_down/src/widgets/selection_widget.dart';
 import 'properties/confirm_button_props.dart';
 import 'properties/filter_props.dart';
 import 'properties/items_logic_props.dart';
@@ -12,7 +12,7 @@ import 'properties/methods_logic_props.dart';
 import 'properties/selected_item_decoration_pros.dart';
 import 'properties/validator_props.dart';
 
-class MultiSelectDropDown<T> extends StatefulWidget {
+class HighQMultiSelectDropDown<T> extends StatefulWidget {
   final ItemsLogicProps<T> itemsLogicProps;
   final FilterAndCompareProps<T> filterAndCompareProps;
   final DropDownDecoratorProps dropdownDecorator;
@@ -30,7 +30,7 @@ class MultiSelectDropDown<T> extends StatefulWidget {
 
   final bool enabled;
 
-  MultiSelectDropDown({
+  HighQMultiSelectDropDown({
     Key? key,
     this.dropdownDecorator = const DropDownDecoratorProps(),
     this.confirmButtonProps = const ConfirmButtonProps(),
@@ -55,10 +55,10 @@ class MultiSelectDropDown<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  MultiSelectDropDownState<T> createState() => MultiSelectDropDownState<T>();
+  HighQMultiSelectDropDownState<T> createState() => HighQMultiSelectDropDownState<T>();
 }
 
-class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
+class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>> {
   final ValueNotifier<List<T>> _selectedItemsNotifier = ValueNotifier([]);
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
   final _popupStateKey = GlobalKey<SelectionWidgetState<T>>();
@@ -72,7 +72,7 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   }
 
   @override
-  void didUpdateWidget(MultiSelectDropDown<T> oldWidget) {
+  void didUpdateWidget(HighQMultiSelectDropDown<T> oldWidget) {
     List<T> oldSelectedItems = oldWidget.itemsLogicProps.initialSelectedItems;
 
     List<T> newSelectedItems = widget.itemsLogicProps.initialSelectedItems;

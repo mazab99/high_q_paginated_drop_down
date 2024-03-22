@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/high_q_paginated_drop_down_controller.dart';
+import 'package:high_q_paginated_drop_down/src/high_q_paginated_drop_down_controller.dart';
 import 'high_q_paginated_drop_down.dart';
 import 'model/menu_item_model.dart';
 

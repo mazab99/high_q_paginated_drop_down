@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:paginated_search_drop_down/src/extensions/string_extension.dart';
-import 'package:paginated_search_drop_down/src/model/menu_item_model.dart';
+import 'package:high_q_paginated_drop_down/src/extensions/string_extension.dart';
+import 'package:high_q_paginated_drop_down/src/model/menu_item_model.dart';
 
 // ignore: prefer-match-file-name
 enum PaginatedSearchDropdownStatus { initial, busy, error, loaded }
