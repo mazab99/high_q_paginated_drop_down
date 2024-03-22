@@ -333,17 +333,22 @@ class MultiSelectDropDownState<T> extends State<MultiSelectDropDown<T>> {
   Widget _popupWidgetInstance() {
     return SelectionWidget<T>(
       key: _popupStateKey,
-      popupProps: widget.popupProps,
-      itemAsString: widget.itemsLogicProps.itemAsString,
-      filterFn: widget.filterAndCompareProps.filterFn,
-      confirmText: widget.confirmButtonProps.confirmText,
       items: widget.itemsLogicProps.items,
+      itemAsString: widget.itemsLogicProps.itemAsString,
+      asyncItems: widget.itemsLogicProps.asyncItems,
+      defaultSelectedItems: List.from(getSelectedItems),
+      popupProps: widget.popupProps,
+
+      filterFn: widget.filterAndCompareProps.filterFn,
+
+      confirmText: widget.confirmButtonProps.confirmText,
       confirmButtonStyle: widget.confirmButtonProps.confirmButtonStyle,
       confirmTextTextStyle: widget.confirmButtonProps.confirmTextTextStyle,
-      asyncItems: widget.itemsLogicProps.asyncItems,
+      confirmButtonPadding: widget.confirmButtonProps.confirmButtonPadding,
+
       onChanged: _handleOnChangeSelectedItems,
       compareFn: widget.filterAndCompareProps.compareFn,
-      defaultSelectedItems: List.from(getSelectedItems),
+
     );
   }
 

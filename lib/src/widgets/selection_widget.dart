@@ -10,6 +10,7 @@ import 'checkbox_widget.dart';
 class SelectionWidget<T> extends StatefulWidget {
   final List<T> items;
   final ValueChanged<List<T>>? onChanged;
+  final EdgeInsetsGeometry? confirmButtonPadding;
   final MultiSelectDropDownOnFind<T>? asyncItems;
   final MultiSelectDropDownItemAsString<T>? itemAsString;
   final MultiSelectDropDownFilterFn<T>? filterFn;
@@ -26,6 +27,7 @@ class SelectionWidget<T> extends StatefulWidget {
     this.defaultSelectedItems = const [],
     this.items = const [],
     this.onChanged,
+    this.confirmButtonPadding= const EdgeInsets.symmetric(horizontal: 8),
     this.confirmTextTextStyle,
     this.asyncItems,
     this.confirmText,
@@ -243,14 +245,17 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   void closePopup() => Navigator.pop(context);
 
   Widget _confirmButton() {
-    Widget defaultConfirmButton = Align(
-      alignment: Alignment.center,
-      child: ElevatedButton(
-        onPressed: onValidate,
-        style: widget.confirmButtonStyle,
-        child: Text(
-          widget.confirmText != null ? widget.confirmText! : "OK",
-          style: widget.confirmTextTextStyle,
+    Widget defaultConfirmButton = Padding(
+      padding:widget.confirmButtonPadding ?? const EdgeInsets.symmetric(horizontal: 8),
+      child: Align(
+        alignment: Alignment.center,
+        child: ElevatedButton(
+          onPressed: onValidate,
+          style: widget.confirmButtonStyle,
+          child: Text(
+            widget.confirmText != null ? widget.confirmText! : "OK",
+            style: widget.confirmTextTextStyle,
+          ),
         ),
       ),
     );

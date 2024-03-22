@@ -316,6 +316,7 @@ class MyApp extends StatelessWidget {
                   ),
                   minimumSize: MaterialStateProperty.all(const Size(double.infinity,30,),),
                 ),
+                confirmButtonPadding: const EdgeInsets.all(8),
               ),
               validatorProps: ValidatorProps(
                 validator: (value) {
