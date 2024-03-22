@@ -208,7 +208,7 @@ class MyApp extends StatelessWidget {
               ),
               filterAndCompareProps: FilterAndCompareProps(
                 compareFn: (item1, item2) => item1 == item2,
-                filterFn: (item, filter) => true,
+                filterFn: (item, filter) => item.toLowerCase().contains(filter.toLowerCase()),
                 filterIcon: const Icon(
                   Icons.arrow_drop_down,
                   color: Colors.green,
