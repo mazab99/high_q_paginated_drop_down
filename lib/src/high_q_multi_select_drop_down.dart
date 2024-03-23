@@ -333,6 +333,7 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
     return SelectionWidget<T>(
       key: _popupStateKey,
       items: widget.itemsLogicProps.items,
+      afterPopTheDialog: widget.confirmButtonProps.afterPopTheDialog,
       itemAsString: widget.itemsLogicProps.itemAsString,
       asyncItems: widget.itemsLogicProps.asyncItems,
       defaultSelectedItems: List.from(getSelectedItems),

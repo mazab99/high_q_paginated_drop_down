@@ -17,6 +17,7 @@ class SelectionWidget<T> extends StatefulWidget {
   final List<T> defaultSelectedItems;
   final PopupPropsMultiSelection<T> popupProps;
   final String? confirmText;
+  final void Function()? afterPopTheDialog;
   final ButtonStyle? confirmButtonStyle;
   final TextStyle? confirmTextTextStyle;
 
@@ -26,6 +27,7 @@ class SelectionWidget<T> extends StatefulWidget {
     this.defaultSelectedItems = const [],
     this.items = const [],
     this.onChanged,
+    this.afterPopTheDialog,
     this.confirmButtonPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.confirmTextTextStyle,
     this.asyncItems,
@@ -61,7 +63,6 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
       _manageItemsByFilter(searchBoxController.text);
     });
   }
-
 
   @override
   void initState() {
@@ -244,7 +245,12 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
       child: Align(
         alignment: Alignment.center,
         child: ElevatedButton(
-          onPressed: onValidate,
+          onPressed: () {
+            onValidate();
+            if (widget.afterPopTheDialog != null) {
+              widget.afterPopTheDialog!();
+            }
+          },
           style: widget.confirmButtonStyle,
           child: Text(
             widget.confirmText != null ? widget.confirmText! : "OK",
