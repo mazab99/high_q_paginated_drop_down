@@ -673,7 +673,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
     );
   }
 
-  String _selectedItemAsString(T data) {
+  String _selectedItemAsString(T? data) {
     if (data == null) {
       return "";
     } else if (widget.itemAsString != null) {
