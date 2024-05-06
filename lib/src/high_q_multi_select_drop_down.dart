@@ -332,19 +332,19 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
   Widget _popupWidgetInstance() {
     return SelectionWidget<T>(
       key: _popupStateKey,
+      popupProps: widget.popupProps,
       items: widget.itemsLogicProps.items,
-      afterPopTheDialog: widget.confirmButtonProps.afterPopTheDialog,
       itemAsString: widget.itemsLogicProps.itemAsString,
       asyncItems: widget.itemsLogicProps.asyncItems,
-      defaultSelectedItems: List.from(getSelectedItems),
-      popupProps: widget.popupProps,
+      afterPopTheDialog: widget.confirmButtonProps.afterPopTheDialog,
       confirmText: widget.confirmButtonProps.confirmText,
       confirmButtonStyle: widget.confirmButtonProps.confirmButtonStyle,
       confirmTextTextStyle: widget.confirmButtonProps.confirmTextTextStyle,
       confirmButtonPadding: widget.confirmButtonProps.confirmButtonPadding,
-      onChanged: _handleOnChangeSelectedItems,
+      defaultSelectedItems: List.from(getSelectedItems),
       compareFn: widget.filterAndCompareProps.compareFn,
       filterFn: widget.filterAndCompareProps.filterFn,
+      onChanged: _handleOnChangeSelectedItems,
     );
   }
 

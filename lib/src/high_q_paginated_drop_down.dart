@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:high_q_paginated_drop_down/src/extensions/context_extension.dart';
 import 'package:high_q_paginated_drop_down/src/extensions/global_paint_bounds.dart';
 import 'package:high_q_paginated_drop_down/src/utils/package_inkwell_widget.dart';
-import 'package:high_q_paginated_drop_down/src/utils/package_search_bar.dart';
+import 'package:high_q_paginated_drop_down/src/utils/search_bar.dart';
 import '../high_q_paginated_drop_down.dart';
 
 class HighQPaginatedDropdown<T> extends StatefulWidget {
@@ -21,6 +21,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
   final double? width;
 
   final double? spaceBetweenDropDownAndItemsDialog;
+  final InputDecoration? textFieldDecoration;
 
   final Duration? searchDelayDuration;
 
@@ -66,6 +67,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     Widget? hintText,
     Widget? loadingWidget,
     Widget Function(Widget)? backgroundDecoration,
+    InputDecoration? textFieldDecoration,
     String? searchHintText,
     Widget? noRecordText,
     double? dropDownMaxHeight,
@@ -81,7 +83,11 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     double? width,
     bool isDialogExpanded = true,
     bool hasTrailingClearIcon = true,
+    bool showTextField = true,
     double? spaceBetweenDropDownAndItemsDialog,
+    Duration? searchDelayDuration,
+    double? paddingValueWhileIsDialogExpanded,
+    MenuItemModel<T>? initialValue,
   }) : this._(
           key: key,
           hintText: hintText,
@@ -101,10 +107,15 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
           isEnabled: isEnabled,
           onTapWhileDisableDropDown: onTapWhileDisableDropDown,
           width: width,
+          showTextField: showTextField,
+          textFieldDecoration: textFieldDecoration,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
           spaceBetweenDropDownAndItemsDialog:
               spaceBetweenDropDownAndItemsDialog,
+          paddingValueWhileIsDialogExpanded: paddingValueWhileIsDialogExpanded,
+          searchDelayDuration: searchDelayDuration,
+          initialFutureValue: initialValue,
         );
 
   const HighQPaginatedDropdown.paginated({
@@ -114,6 +125,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     )? paginatedRequest,
     int? requestItemCount,
     Key? key,
+    InputDecoration? textFieldDecoration,
     PaginatedSearchDropdownController<T>? controller,
     Widget? loadingWidget,
     Widget? hintText,
@@ -139,6 +151,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
   }) : this._(
           key: key,
           controller: controller,
+          textFieldDecoration: textFieldDecoration,
           paddingValueWhileIsDialogExpanded: paddingValueWhileIsDialogExpanded,
           loadingWidget: loadingWidget,
           paginatedRequest: paginatedRequest,
@@ -154,7 +167,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
           leadingIcon: leadingIcon,
           onChanged: onChanged,
           isEnabled: isEnabled,
-    showTextField: showTextField,
+          showTextField: showTextField,
           onTapWhileDisableDropDown: onTapWhileDisableDropDown,
           searchDelayDuration: searchDelayDuration,
           width: width,
@@ -171,6 +184,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     this.showTextField = true,
     this.loadingWidget,
     this.hintText,
+    this.textFieldDecoration = const InputDecoration(),
     this.paddingValueWhileIsDialogExpanded,
     this.backgroundDecoration,
     this.searchHintText,
@@ -200,8 +214,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
       _HighQPaginatedDropdownState<T>();
 }
 
-class _HighQPaginatedDropdownState<T>
-    extends State<HighQPaginatedDropdown<T>> {
+class _HighQPaginatedDropdownState<T> extends State<HighQPaginatedDropdown<T>> {
   late final PaginatedSearchDropdownController<T> dropdownController;
 
   @override
@@ -259,6 +272,7 @@ class _HighQPaginatedDropdownState<T>
       hasTrailingClearIcon: widget.hasTrailingClearIcon,
       spaceBetweenDropDownAndItemsDialog:
           widget.spaceBetweenDropDownAndItemsDialog,
+      textFieldDecoration: widget.textFieldDecoration,
     );
 
     return SizedBox(
@@ -274,6 +288,7 @@ class _DropDown<T> extends StatelessWidget {
   final bool isEnabled;
   final bool showTextField;
   final bool isDialogExpanded;
+  final InputDecoration? textFieldDecoration;
   final double? paddingValueWhileIsDialogExpanded;
   final bool hasTrailingClearIcon;
   final double? dropDownMaxHeight;
@@ -307,6 +322,9 @@ class _DropDown<T> extends StatelessWidget {
     this.trailingClearIcon,
     this.onTapWhileDisableDropDown,
     this.padding,
+    this.textFieldDecoration = const InputDecoration(
+      isDense: true,
+    ),
     this.hintText,
     this.dropDownMaxHeight,
     this.paginatedRequest,
@@ -474,6 +492,7 @@ class _DropDown<T> extends StatelessWidget {
                   paginatedRequest: paginatedRequest,
                   searchHintText: searchHintText,
                   searchDelayDuration: searchDelayDuration,
+                  textFieldDecoration: textFieldDecoration,
                 ),
               ),
             ],
@@ -516,6 +535,7 @@ class _DropDownCard<T> extends StatelessWidget {
   final bool isReversed;
   final bool showTextField;
   final Duration? searchDelayDuration;
+  final InputDecoration? textFieldDecoration;
   final Future<List<MenuItemModel<T>>?> Function(
     int page,
     String? searchText,
@@ -531,6 +551,9 @@ class _DropDownCard<T> extends StatelessWidget {
     required this.showTextField,
     required this.isReversed,
     this.searchHintText,
+    this.textFieldDecoration = const InputDecoration(
+      isDense: true,
+    ),
     this.paginatedRequest,
     this.onChanged,
     this.loadingWidget,
@@ -557,12 +580,13 @@ class _DropDownCard<T> extends StatelessWidget {
                 verticalDirection:
                     isReversed ? VerticalDirection.up : VerticalDirection.down,
                 children: [
-                  if(showTextField==true)
-                  _MultiSelectDropDownBar(
-                    controller: controller,
-                    searchHintText: searchHintText,
-                    searchDelayDuration: searchDelayDuration,
-                  ),
+                  if (showTextField == true)
+                    _MultiSelectDropDownBar(
+                      controller: controller,
+                      searchHintText: searchHintText,
+                      searchDelayDuration: searchDelayDuration,
+                      textFieldDecoration: textFieldDecoration,
+                    ),
                   Flexible(
                     child: _DropDownListView(
                       dropdownController: controller,
@@ -587,11 +611,15 @@ class _MultiSelectDropDownBar<T> extends StatelessWidget {
   final Duration? searchDelayDuration;
   final PaginatedSearchDropdownController<T> controller;
   final String? searchHintText;
+  final InputDecoration? textFieldDecoration;
 
   const _MultiSelectDropDownBar({
     required this.controller,
     this.searchHintText,
     this.searchDelayDuration,
+    this.textFieldDecoration = const InputDecoration(
+      isDense: true,
+    ),
   });
 
   @override
@@ -618,6 +646,7 @@ class _MultiSelectDropDownBar<T> extends StatelessWidget {
             isNewSearch: true,
           );
         },
+        textFieldDecoration: textFieldDecoration,
       ),
     );
   }

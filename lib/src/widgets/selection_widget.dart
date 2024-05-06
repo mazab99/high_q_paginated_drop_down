@@ -328,24 +328,25 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
 
   Widget _loadingWidget() {
     return ValueListenableBuilder(
-        valueListenable: _loadingNotifier,
-        builder: (context, bool isLoading, wid) {
-          if (isLoading) {
-            if (widget.popupProps.loadingBuilder != null) {
-              return widget.popupProps.loadingBuilder!(
-                context,
-                searchBoxController.text,
-              );
-            } else {
-              return Container(
-                height: 70,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            }
+      valueListenable: _loadingNotifier,
+      builder: (context, bool isLoading, wid) {
+        if (isLoading) {
+          if (widget.popupProps.loadingBuilder != null) {
+            return widget.popupProps.loadingBuilder!(
+              context,
+              searchBoxController.text,
+            );
+          } else {
+            return Container(
+              height: 70,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            );
           }
-          return const SizedBox.shrink();
-        });
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 
   Future<void> _manageItemsByFilter(
@@ -676,10 +677,17 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
   String _selectedItemAsString(T? data) {
     if (data == null) {
       return "";
-    } else if (widget.itemAsString != null) {
-      return widget.itemAsString!(data);
     } else {
-      return data.toString();
+      try {
+        if (widget.itemAsString != null) {
+          return widget.itemAsString!(data);
+        } else {
+          return data.toString();
+        }
+      } catch (e) {
+        print("Error converting item to string: $e");
+        return "";
+      }
     }
   }
 

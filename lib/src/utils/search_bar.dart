@@ -10,6 +10,7 @@ class PackageSearchBar extends StatelessWidget {
   final String? hintText;
   final TextEditingController? controller;
   final TextStyle? style;
+  final InputDecoration? textFieldDecoration;
 
   final void Function(String value)? onChangeComplete;
   final Widget? leadingIcon;
@@ -24,6 +25,7 @@ class PackageSearchBar extends StatelessWidget {
     this.focusNode,
     this.controller,
     this.style,
+    this.textFieldDecoration = const InputDecoration( isDense: true,),
   });
 
   @override
@@ -50,6 +52,7 @@ class PackageSearchBar extends StatelessWidget {
                 focusNode: focusNode,
                 controller: controller,
                 style: style,
+                textFieldDecoration: textFieldDecoration,
               ),
             )
           : Card(
@@ -65,6 +68,7 @@ class PackageSearchBar extends StatelessWidget {
                 focusNode: focusNode,
                 controller: controller,
                 style: style,
+                textFieldDecoration: textFieldDecoration,
               ),
             ),
     );
@@ -79,6 +83,7 @@ class SearchTextFormField extends StatelessWidget {
   final TextStyle? style;
   final void Function(String value)? onChangeComplete;
   final Widget? leadingIcon;
+  final InputDecoration? textFieldDecoration;
 
   const SearchTextFormField({
     this.onChangeComplete,
@@ -88,6 +93,9 @@ class SearchTextFormField extends StatelessWidget {
     this.focusNode,
     this.controller,
     this.style,
+    this.textFieldDecoration = const InputDecoration(
+      isDense: true,
+    ),
   });
 
   @override
@@ -117,13 +125,14 @@ class SearchTextFormField extends StatelessWidget {
           );
         },
         style: style,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.zero,
-          isDense: true,
-          border: InputBorder.none,
-          hintText: hintText,
-          icon: leadingIcon,
-        ),
+        decoration: textFieldDecoration ??
+            InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              isDense: true,
+              border: InputBorder.none,
+              hintText: hintText,
+              icon: leadingIcon,
+            ),
       ),
     );
   }
