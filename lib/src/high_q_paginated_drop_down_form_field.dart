@@ -19,7 +19,6 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
 
   final EdgeInsetsGeometry? padding;
 
-
   final Future<List<MenuItemModel<T>>?> Function(
     int page,
     String? searchText,
@@ -100,7 +99,8 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
           dropDownMaxHeight: dropDownMaxHeight,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
-          spaceBetweenDropDownAndItemsDialog: spaceBetweenDropDownAndItemsDialog,
+          spaceBetweenDropDownAndItemsDialog:
+              spaceBetweenDropDownAndItemsDialog,
         );
 
   PaginatedSearchDropdownFormField.paginated({
@@ -158,9 +158,9 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
           searchDelayDuration: searchDelayDuration,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
-          spaceBetweenDropDownAndItemsDialog: spaceBetweenDropDownAndItemsDialog,
+          spaceBetweenDropDownAndItemsDialog:
+              spaceBetweenDropDownAndItemsDialog,
         );
-
 
   PaginatedSearchDropdownFormField._({
     this.controller,
@@ -232,7 +232,8 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                         if (onChanged != null) onChanged(value);
                       },
                       isDialogExpanded: isDialogExpanded,
-                      spaceBetweenDropDownAndItemsDialog: spaceBetweenDropDownAndItemsDialog,
+                      spaceBetweenDropDownAndItemsDialog:
+                          spaceBetweenDropDownAndItemsDialog,
                     ),
                   if (paginatedRequest != null)
                     HighQPaginatedDropdown<T>.paginated(
@@ -258,7 +259,8 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                       },
                       searchDelayDuration: searchDelayDuration,
                       isDialogExpanded: isDialogExpanded,
-                      spaceBetweenDropDownAndItemsDialog: spaceBetweenDropDownAndItemsDialog,
+                      spaceBetweenDropDownAndItemsDialog:
+                          spaceBetweenDropDownAndItemsDialog,
                     ),
                   if (state.hasError)
                     errorWidget != null

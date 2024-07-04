@@ -26,7 +26,6 @@ class PaginatedSearchDropdownController<T> {
     String? key,
   )? paginatedRequest;
 
-
   late int requestItemCount;
 
   late List<MenuItemModel<T>>? items;
@@ -65,7 +64,6 @@ class PaginatedSearchDropdownController<T> {
     }
     status.value = PaginatedSearchDropdownStatus.loaded;
   }
-
 
   void fillSearchedList(String? value) {
     if (value == null || value.isEmpty) searchedItems.value = items;
