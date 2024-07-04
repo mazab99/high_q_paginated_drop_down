@@ -26,6 +26,7 @@ class PaginatedSearchDropdownController<T> {
     String? key,
   )? paginatedRequest;
 
+
   late int requestItemCount;
 
   late List<MenuItemModel<T>>? items;
@@ -47,43 +48,31 @@ class PaginatedSearchDropdownController<T> {
     if (paginatedRequest == null) return;
     if (isNewSearch) {
       _page = 1;
-      paginatedItemList.value = [];
+      paginatedItemList.value = null;
       _hasMoreData = true;
     }
     if (!_hasMoreData) return;
     status.value = PaginatedSearchDropdownStatus.busy;
     final response = await paginatedRequest!(page, searchText);
     if (response is! List<MenuItemModel<T>>) return;
-    // Prevent adding duplicates
-    if (paginatedItemList.value == null) {
-      paginatedItemList.value = response;
-    } else {
-      final existingIds = paginatedItemList.value!.map((e) => e.value).toSet();
-      paginatedItemList.value!.addAll(
-        response.where((item) => !existingIds.contains(item.value)),
-      );
-    }
 
+    paginatedItemList.value ??= [];
+    paginatedItemList.value = paginatedItemList.value! + response;
     if (response.length < requestItemCount) {
       _hasMoreData = false;
     } else {
-      _page += 1;
+      _page = _page + 1;
     }
-
     status.value = PaginatedSearchDropdownStatus.loaded;
   }
 
+
   void fillSearchedList(String? value) {
-    if (value == null || value.isEmpty) {
-      searchedItems.value = items;
-      return;
-    }
+    if (value == null || value.isEmpty) searchedItems.value = items;
 
     final tempList = <MenuItemModel<T>>[];
     for (final element in items ?? <MenuItemModel<T>>[]) {
-      if (element.label.containsWithTurkishChars(value)) {
-        tempList.add(element);
-      }
+      if (element.label.containsWithTurkishChars(value!)) tempList.add(element);
     }
     searchedItems.value = tempList;
   }
