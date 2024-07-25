@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:high_q_paginated_drop_down/src/multi_selection_controller.dart';
 import 'package:high_q_paginated_drop_down/src/properties/clear_button_props.dart';
 import 'package:high_q_paginated_drop_down/src/properties/dropdown_button_props.dart';
 import 'package:high_q_paginated_drop_down/src/properties/dropdown_decorator_props.dart';
@@ -27,7 +28,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
   final MethodLogicProps<T> methodLogicProps;
   final String moreText;
   final String lessText;
-
+  final MultiSelectController? controller;
   final int maxDisplayCount;
   final ValueChanged<List<T>>? onChanged;
   final FormFieldSetter<List<T>>? onSavedMultiSelection;
@@ -42,6 +43,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
     this.moreText = 'Show more',
     this.lessText = 'Show less',
     this.maxDisplayCount = 3,
+    this.controller,
     this.dropdownDecorator = const DropDownDecoratorProps(),
     this.clearButtonProps = const ClearButtonProps(),
     this.dropdownButtonProps = const DropdownButtonProps(),
@@ -85,6 +87,10 @@ class HighQMultiSelectDropDownState<T>
       widget.itemsLogicProps.initialSelectedItems,
     );
     _showAllItems = false;
+    // Initialize the controller
+    if (widget.controller != null) {
+      widget.controller!.clearSelectionCallback = _clearSelection;
+    }
   }
 
   @override
@@ -106,7 +112,11 @@ class HighQMultiSelectDropDownState<T>
 
     super.didUpdateWidget(oldWidget);
   }
-
+  void _clearSelection() {
+    setState(() {
+      _selectedItemsNotifier.value = [];
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<List<T?>>(

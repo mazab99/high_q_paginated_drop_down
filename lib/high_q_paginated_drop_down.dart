@@ -2,6 +2,7 @@ library high_q_paginated_drop_down;
 export 'src/model/menu_item_model.dart';
 export 'src/high_q_paginated_drop_down.dart';
 export 'src/high_q_paginated_drop_down_controller.dart';
+export 'src/multi_selection_controller.dart';
 export 'src/high_q_paginated_drop_down_form_field.dart';
 export 'src/loggers/print_manger.dart';
 export 'src/loggers/colored_print.dart';
