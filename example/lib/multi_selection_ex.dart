@@ -40,10 +40,9 @@ class MultiSelectionEx extends StatelessWidget {
               moreText: 'عرض المزيد',
               lessText: 'عرض أقل',
               maxDisplayCount: 1,
-              clearButtonProps: const ClearButtonProps(
-                isVisible: false,
-                clearText: 'delete'
-              ),
+              makeButtonsInRow: false,
+              clearButtonProps:
+                  const ClearButtonProps(isVisible: false, clearText: 'delete'),
               itemsLogicProps: ItemsLogicProps(
                 items: const [
                   "Story-time",

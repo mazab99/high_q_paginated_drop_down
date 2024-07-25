@@ -27,6 +27,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
   final PopupPropsMultiSelection<T> popupProps;
   final MethodLogicProps<T> methodLogicProps;
   final String moreText;
+  final bool makeButtonsInRow;
   final String lessText;
   final MultiSelectController? controller;
   final int maxDisplayCount;
@@ -44,6 +45,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
     this.lessText = 'Show less',
     this.maxDisplayCount = 3,
     this.controller,
+    this.makeButtonsInRow= false,
     this.dropdownDecorator = const DropDownDecoratorProps(),
     this.clearButtonProps = const ClearButtonProps(),
     this.dropdownButtonProps = const DropdownButtonProps(),
@@ -476,6 +478,7 @@ class HighQMultiSelectDropDownState<T>
   Widget _popupWidgetInstance() {
     return SelectionWidget<T>(
       key: _popupStateKey,
+      makeButtonsInRow:widget.makeButtonsInRow ,
       popupProps: widget.popupProps,
       items: widget.itemsLogicProps.items,
       itemAsString: widget.itemsLogicProps.itemAsString,

@@ -23,10 +23,12 @@ class SelectionWidget<T> extends StatefulWidget {
   final TextStyle? confirmTextTextStyle;
   final ClearButtonProps clearButtonProps;
   final void Function()? clearAllSelected;
+  final bool? makeButtonsInRow;
 
   const SelectionWidget({
     Key? key,
     required this.popupProps,
+    this.makeButtonsInRow = false,
     this.defaultSelectedItems = const [],
     this.items = const [],
     this.onChanged,
@@ -229,8 +231,22 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
                 ],
               ),
             ),
-            _confirmButton(),
-            _clearAllButton(),
+            if (widget.makeButtonsInRow == true) ...[
+              Row(
+                children: [
+                  Expanded(child: _confirmButton()),
+                  Expanded(child: _clearAllButton()),
+                ],
+              ),
+            ],
+            if (widget.makeButtonsInRow == false) ...[
+              Column(
+                children: [
+                  _confirmButton(),
+                  _clearAllButton(),
+                ],
+              ),
+            ],
           ],
         );
       },
