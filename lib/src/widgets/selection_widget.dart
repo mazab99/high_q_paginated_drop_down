@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:high_q_paginated_drop_down/src/properties/clear_button_props.dart';
 import '../properties/popup_props.dart';
 import '../utils/typedefs.dart';
 import 'checkbox_widget.dart';
@@ -20,6 +21,8 @@ class SelectionWidget<T> extends StatefulWidget {
   final void Function()? afterPopTheDialog;
   final ButtonStyle? confirmButtonStyle;
   final TextStyle? confirmTextTextStyle;
+  final ClearButtonProps clearButtonProps;
+  final void Function()? clearAllSelected;
 
   const SelectionWidget({
     Key? key,
@@ -27,6 +30,8 @@ class SelectionWidget<T> extends StatefulWidget {
     this.defaultSelectedItems = const [],
     this.items = const [],
     this.onChanged,
+    this.clearAllSelected,
+    this.clearButtonProps = const ClearButtonProps(),
     this.afterPopTheDialog,
     this.confirmButtonPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.confirmTextTextStyle,
@@ -225,6 +230,7 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
               ),
             ),
             _confirmButton(),
+            _clearAllButton(),
           ],
         );
       },
@@ -268,6 +274,35 @@ class SelectionWidgetState<T> extends State<SelectionWidget<T>> {
     }
 
     return defaultConfirmButton;
+  }
+
+  Widget _clearAllButton() {
+    Widget defaultClearButton = Padding(
+      padding: widget.confirmButtonPadding ??
+          const EdgeInsets.symmetric(
+            horizontal: 8,
+          ),
+      child: Align(
+        alignment: Alignment.center,
+        child: ElevatedButton(
+          onPressed: () {
+            widget.clearAllSelected!();
+            closePopup();
+            if (widget.afterPopTheDialog != null) {
+              widget.afterPopTheDialog!();
+            }
+          },
+          style: widget.confirmButtonStyle,
+          child: Text(
+            widget.clearButtonProps.clearText != null
+                ? widget.clearButtonProps.clearText!
+                : "clear",
+            style: widget.confirmTextTextStyle,
+          ),
+        ),
+      ),
+    );
+    return defaultClearButton;
   }
 
   void _showErrorDialog(dynamic error) {

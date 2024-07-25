@@ -7,6 +7,7 @@ class ClearButtonProps extends IconButtonProps {
     super.icon = const Icon(Icons.clear, size: 24,color: Colors.red,),
     super.isVisible = false,
     super.iconSize = 24.0,
+    super.clearText,
     super.visualDensity,
     super.padding = const EdgeInsets.all(8.0),
     super.alignment = Alignment.center,

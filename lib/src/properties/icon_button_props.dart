@@ -8,6 +8,7 @@ class IconButtonProps {
   final AlignmentGeometry alignment;
   final double? splashRadius;
   final Widget icon;
+  final String? clearText;
   final Color? focusColor;
   final Color? hoverColor;
   final Color? color;
@@ -36,6 +37,7 @@ class IconButtonProps {
     this.splashRadius,
     this.color,
     this.focusColor,
+    this.clearText='clear',
     this.hoverColor,
     this.highlightColor,
     this.splashColor,

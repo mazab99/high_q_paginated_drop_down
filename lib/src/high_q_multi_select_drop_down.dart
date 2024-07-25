@@ -488,6 +488,8 @@ class HighQMultiSelectDropDownState<T>
       defaultSelectedItems: List.from(getSelectedItems),
       compareFn: widget.filterAndCompareProps.compareFn,
       filterFn: widget.filterAndCompareProps.filterFn,
+      clearButtonProps: widget.clearButtonProps,
+      clearAllSelected: clearAllSelected,
       onChanged: _handleOnChangeSelectedItems,
     );
   }

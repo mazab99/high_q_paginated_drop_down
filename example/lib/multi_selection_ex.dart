@@ -42,6 +42,7 @@ class MultiSelectionEx extends StatelessWidget {
               maxDisplayCount: 1,
               clearButtonProps: const ClearButtonProps(
                 isVisible: false,
+                clearText: 'delete'
               ),
               itemsLogicProps: ItemsLogicProps(
                 items: const [
