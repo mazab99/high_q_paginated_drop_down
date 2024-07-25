@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../utils/typedefs.dart';
 
 class FilterAndCompareProps<T> {
