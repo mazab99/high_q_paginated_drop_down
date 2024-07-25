@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:high_q_paginated_drop_down/src/properties/clear_button_props.dart';
+import 'package:high_q_paginated_drop_down/src/properties/dropdown_button_props.dart';
 import 'package:high_q_paginated_drop_down/src/properties/dropdown_decorator_props.dart';
 import 'package:high_q_paginated_drop_down/src/properties/popup_props.dart';
 import 'package:high_q_paginated_drop_down/src/utils/typedefs.dart';
@@ -20,6 +21,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
   final SelectedItemDecorationPros selectedItemDecorationPros;
   final ConfirmButtonProps confirmButtonProps;
   final ClearButtonProps clearButtonProps;
+  final DropdownButtonProps dropdownButtonProps;
   final ValidatorProps<T> validatorProps;
   final PopupPropsMultiSelection<T> popupProps;
   final MethodLogicProps<T> methodLogicProps;
@@ -36,6 +38,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
     Key? key,
     this.dropdownDecorator = const DropDownDecoratorProps(),
     this.clearButtonProps = const ClearButtonProps(),
+    this.dropdownButtonProps = const DropdownButtonProps(),
     this.confirmButtonProps = const ConfirmButtonProps(),
     this.selectedItemDecorationPros = const SelectedItemDecorationPros(),
     this.itemsLogicProps = const ItemsLogicProps(),
@@ -237,6 +240,7 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
   }
   Widget _manageSuffixIcons() {
     clearButtonPressed() => clearAllSelected();
+     dropdownButtonPressed  () => _selectSearchMode();
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -265,6 +269,31 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
             mouseCursor: widget.clearButtonProps.mouseCursor,
             tooltip: widget.clearButtonProps.tooltip,
             visualDensity: widget.clearButtonProps.visualDensity,
+          ),
+        if (widget.dropdownButtonProps.isVisible)
+          IconButton(
+            style: widget.dropdownButtonProps.style,
+            isSelected: widget.dropdownButtonProps.isSelected,
+            selectedIcon: widget.dropdownButtonProps.selectedIcon,
+            onPressed: widget.dropdownButtonProps.onPressed ?? dropdownButtonPressed,
+            icon: widget.dropdownButtonProps.icon,
+            constraints: widget.dropdownButtonProps.constraints,
+            hoverColor: widget.dropdownButtonProps.hoverColor,
+            highlightColor: widget.dropdownButtonProps.highlightColor,
+            splashColor: widget.dropdownButtonProps.splashColor,
+            color: widget.dropdownButtonProps.color,
+            focusColor: widget.dropdownButtonProps.focusColor,
+            iconSize: widget.dropdownButtonProps.iconSize,
+            padding: widget.dropdownButtonProps.padding,
+            splashRadius: widget.dropdownButtonProps.splashRadius,
+            alignment: widget.dropdownButtonProps.alignment,
+            autofocus: widget.dropdownButtonProps.autofocus,
+            disabledColor: widget.dropdownButtonProps.disabledColor,
+            enableFeedback: widget.dropdownButtonProps.enableFeedback,
+            focusNode: widget.dropdownButtonProps.focusNode,
+            mouseCursor: widget.dropdownButtonProps.mouseCursor,
+            tooltip: widget.dropdownButtonProps.tooltip,
+            visualDensity: widget.dropdownButtonProps.visualDensity,
           ),
       ],
     );

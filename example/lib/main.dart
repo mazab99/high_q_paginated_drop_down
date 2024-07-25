@@ -192,6 +192,9 @@ class MyApp extends StatelessWidget {
             HighQMultiSelectDropDown<String>(
               key: UniqueKey(),
               enabled: true,
+              clearButtonProps: const ClearButtonProps(
+                isVisible: true,
+              ),
               itemsLogicProps: ItemsLogicProps(
                 items: const [
                   "Story-time",
@@ -211,10 +214,6 @@ class MyApp extends StatelessWidget {
                 compareFn: (item1, item2) => item1 == item2,
                 filterFn: (item, filter) =>
                     item.toLowerCase().contains(filter.toLowerCase()),
-                filterIcon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.green,
-                ),
               ),
               dropdownDecorator: DropDownDecoratorProps(
                 textAlignVertical: TextAlignVertical.center,

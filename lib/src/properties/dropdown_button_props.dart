@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'icon_button_props.dart';
 
-class ClearButtonProps extends IconButtonProps {
-  const ClearButtonProps({
-    super.icon = const Icon(Icons.clear, size: 24,color: Colors.red,),
-    super.isVisible = false,
+class DropdownButtonProps extends IconButtonProps {
+  const DropdownButtonProps({
+    super.icon = const Icon(Icons.arrow_drop_down, size: 24),
+    super.isVisible = true,
     super.iconSize = 24.0,
     super.visualDensity,
     super.padding = const EdgeInsets.all(8.0),

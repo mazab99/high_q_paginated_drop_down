@@ -9,6 +9,6 @@ class FilterAndCompareProps<T> {
   const FilterAndCompareProps({
     this.filterFn,
     this.compareFn,
-    this.filterIcon= const Icon(Icons.arrow_drop_down_sharp),
+    this.filterIcon,
   });
 }

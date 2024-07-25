@@ -8,6 +8,7 @@ export 'src/loggers/colored_print.dart';
 export 'src/high_q_multi_select_drop_down.dart';
 export 'src/properties/scrollbar_props.dart';
 export 'src/properties/clear_button_props.dart';
+export 'src/properties/dropdown_button_props.dart';
 export 'src/widgets/checkbox_widget.dart';
 export 'src/widgets/popup_menu.dart';
 export 'src/widgets/selection_widget.dart';
