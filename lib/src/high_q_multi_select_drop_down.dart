@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:high_q_paginated_drop_down/src/properties/clear_button_props.dart';
 import 'package:high_q_paginated_drop_down/src/properties/dropdown_decorator_props.dart';
 import 'package:high_q_paginated_drop_down/src/properties/popup_props.dart';
 import 'package:high_q_paginated_drop_down/src/utils/typedefs.dart';
@@ -18,6 +19,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
   final DropDownDecoratorProps dropdownDecorator;
   final SelectedItemDecorationPros selectedItemDecorationPros;
   final ConfirmButtonProps confirmButtonProps;
+  final ClearButtonProps clearButtonProps;
   final ValidatorProps<T> validatorProps;
   final PopupPropsMultiSelection<T> popupProps;
   final MethodLogicProps<T> methodLogicProps;
@@ -33,6 +35,7 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
   HighQMultiSelectDropDown({
     Key? key,
     this.dropdownDecorator = const DropDownDecoratorProps(),
+    this.clearButtonProps = const ClearButtonProps(),
     this.confirmButtonProps = const ConfirmButtonProps(),
     this.selectedItemDecorationPros = const SelectedItemDecorationPros(),
     this.itemsLogicProps = const ItemsLogicProps(),
@@ -218,7 +221,7 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
         .applyDefaults(Theme.of(state.context).inputDecorationTheme)
         .copyWith(
           enabled: widget.enabled,
-          suffixIcon: widget.filterAndCompareProps.filterIcon,
+          suffixIcon: widget.filterAndCompareProps.filterIcon ?? _manageSuffixIcons(),
           errorText: state.errorText,
         );
   }
@@ -232,7 +235,40 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
       return data.toString();
     }
   }
-
+  Widget _manageSuffixIcons() {
+    clearButtonPressed() => clearAllSelected();
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        if (widget.clearButtonProps.isVisible && getSelectedItems.isNotEmpty)
+          IconButton(
+            style: widget.clearButtonProps.style,
+            isSelected: widget.clearButtonProps.isSelected,
+            selectedIcon: widget.clearButtonProps.selectedIcon,
+            onPressed: widget.clearButtonProps.onPressed ?? clearButtonPressed,
+            icon: widget.clearButtonProps.icon,
+            constraints: widget.clearButtonProps.constraints,
+            hoverColor: widget.clearButtonProps.hoverColor,
+            highlightColor: widget.clearButtonProps.highlightColor,
+            splashColor: widget.clearButtonProps.splashColor,
+            color: widget.clearButtonProps.color,
+            focusColor: widget.clearButtonProps.focusColor,
+            iconSize: widget.clearButtonProps.iconSize,
+            padding: widget.clearButtonProps.padding,
+            splashRadius: widget.clearButtonProps.splashRadius,
+            alignment: widget.clearButtonProps.alignment,
+            autofocus: widget.clearButtonProps.autofocus,
+            disabledColor: widget.clearButtonProps.disabledColor,
+            enableFeedback: widget.clearButtonProps.enableFeedback,
+            focusNode: widget.clearButtonProps.focusNode,
+            mouseCursor: widget.clearButtonProps.mouseCursor,
+            tooltip: widget.clearButtonProps.tooltip,
+            visualDensity: widget.clearButtonProps.visualDensity,
+          ),
+      ],
+    );
+  }
   RelativeRect _position(RenderBox popupButtonObject, RenderBox overlay) {
     return RelativeRect.fromSize(
       Rect.fromPoints(
@@ -412,7 +448,7 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
   void removeItem(T itemToRemove) => _handleOnChangeSelectedItems(
       getSelectedItems..removeWhere((i) => _isEqual(itemToRemove, i)));
 
-  void clear() => _handleOnChangeSelectedItems([]);
+  void clearAllSelected() => _handleOnChangeSelectedItems([]);
 
   T? get getSelectedItem =>
       getSelectedItems.isEmpty ? null : getSelectedItems.first;
