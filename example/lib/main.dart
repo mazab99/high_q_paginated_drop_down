@@ -192,8 +192,11 @@ class MyApp extends StatelessWidget {
             HighQMultiSelectDropDown<String>(
               key: UniqueKey(),
               enabled: true,
+              moreText: 'عرض المزيد',
+              lessText: 'عرض أقل',
+              maxDisplayCount: 1,
               clearButtonProps: const ClearButtonProps(
-                isVisible: true,
+                isVisible: false,
               ),
               itemsLogicProps: ItemsLogicProps(
                 items: const [
@@ -317,6 +320,11 @@ class MyApp extends StatelessWidget {
                   fontSize: 15,
                   fontWeight: FontWeight.w900,
                 ),
+                moreTextStyle: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
               confirmButtonProps: ConfirmButtonProps(
                 confirmText: 'done',
@@ -338,17 +346,17 @@ class MyApp extends StatelessWidget {
                 ),
                 confirmButtonPadding: const EdgeInsets.all(8),
               ),
-              validatorProps: ValidatorProps(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'required filed';
-                  } else if (value.length > 3) {
-                    return "only 1 to 3 items are allowed";
-                  }
-                  return null;
-                },
-                autoValidateMode: AutovalidateMode.always,
-              ),
+              // validatorProps: ValidatorProps(
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'required filed';
+              //     } else if (value.length > 3) {
+              //       return "only 1 to 3 items are allowed";
+              //     }
+              //     return null;
+              //   },
+              //   autoValidateMode: AutovalidateMode.always,
+              // ),
               methodLogicProps: MethodLogicProps(
                 onChanged: (value) {
                   if (kDebugMode) {

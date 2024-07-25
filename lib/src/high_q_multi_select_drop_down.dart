@@ -25,7 +25,10 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
   final ValidatorProps<T> validatorProps;
   final PopupPropsMultiSelection<T> popupProps;
   final MethodLogicProps<T> methodLogicProps;
+  final String moreText;
+  final String lessText;
 
+  final int maxDisplayCount;
   final ValueChanged<List<T>>? onChanged;
   final FormFieldSetter<List<T>>? onSavedMultiSelection;
   final BeforeChangeMultiSelection<T>? onBeforeChangeMultiSelection;
@@ -36,6 +39,9 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
 
   HighQMultiSelectDropDown({
     Key? key,
+    this.moreText = 'Show more',
+    this.lessText = 'Show less',
+    this.maxDisplayCount = 3,
     this.dropdownDecorator = const DropDownDecoratorProps(),
     this.clearButtonProps = const ClearButtonProps(),
     this.dropdownButtonProps = const DropdownButtonProps(),
@@ -61,13 +67,16 @@ class HighQMultiSelectDropDown<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  HighQMultiSelectDropDownState<T> createState() => HighQMultiSelectDropDownState<T>();
+  HighQMultiSelectDropDownState<T> createState() =>
+      HighQMultiSelectDropDownState<T>();
 }
 
-class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>> {
+class HighQMultiSelectDropDownState<T>
+    extends State<HighQMultiSelectDropDown<T>> {
   final ValueNotifier<List<T>> _selectedItemsNotifier = ValueNotifier([]);
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
   final _popupStateKey = GlobalKey<SelectionWidgetState<T>>();
+  bool _showAllItems = false;
 
   @override
   void initState() {
@@ -75,6 +84,7 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
     _selectedItemsNotifier.value = List.from(
       widget.itemsLogicProps.initialSelectedItems,
     );
+    _showAllItems = false;
   }
 
   @override
@@ -121,6 +131,8 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
   }
 
   Widget _defaultSelectedItemWidget() {
+    final maxDisplayCount = widget.maxDisplayCount;
+
     Widget defaultItemMultiSelectionMode(T item) {
       return Container(
         padding: widget.selectedItemDecorationPros.selectedItemBoxPadding ??
@@ -167,15 +179,68 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
       );
     }
 
-    Widget selectedItemWidget() {
-      return Wrap(
-        children: getSelectedItems
-            .map((e) => defaultItemMultiSelectionMode(e))
-            .toList(),
-      );
+    List<Widget> buildSelectedItemWidgets(List<T> items) {
+      if (items.length <= maxDisplayCount) {
+        return items.map((e) => defaultItemMultiSelectionMode(e)).toList();
+      } else {
+        final displayedItems = items.take(maxDisplayCount).toList();
+        final remainingItems = items.skip(maxDisplayCount).toList();
+
+        return [
+          ...displayedItems.map((e) => defaultItemMultiSelectionMode(e)),
+          // if (remainingItems.isNotEmpty)
+          //   GestureDetector(
+          //     onTap: () {
+          //       setState(() {
+          //         _showAllItems = !_showAllItems;
+          //       });
+          //     },
+          //     child: Container(
+          //       padding: EdgeInsets.symmetric(horizontal: 8),
+          //       child: Text(
+          //         _showAllItems
+          //             ? widget.lessText
+          //             : '+${items.length - maxDisplayCount} ${widget.moreText}',
+          //         style: widget.selectedItemDecorationPros.moreTextStyle ??
+          //             Theme.of(context).textTheme.titleSmall,
+          //       ),
+          //     ),
+          //   ),
+          if (_showAllItems)
+            ...remainingItems.map((e) => defaultItemMultiSelectionMode(e)),
+        ];
+      }
     }
 
-    return selectedItemWidget();
+    final selectedItems = getSelectedItems;
+    final itemWidgets = buildSelectedItemWidgets(selectedItems);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          children: itemWidgets,
+        ),
+        if (selectedItems.isNotEmpty && selectedItems.length > maxDisplayCount)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _showAllItems = !_showAllItems;
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                _showAllItems
+                    ? widget.lessText
+                    : '+${selectedItems.length - maxDisplayCount} ${widget.moreText}',
+                style: widget.selectedItemDecorationPros.moreTextStyle ??
+                    Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   Widget _formField() {
@@ -224,7 +289,8 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
         .applyDefaults(Theme.of(state.context).inputDecorationTheme)
         .copyWith(
           enabled: widget.enabled,
-          suffixIcon: widget.filterAndCompareProps.filterIcon ?? _manageSuffixIcons(),
+          suffixIcon: _manageSuffixIcons(),
+          //widget.filterAndCompareProps.filterIcon ?? _manageSuffixIcons(),
           errorText: state.errorText,
         );
   }
@@ -238,9 +304,10 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
       return data.toString();
     }
   }
+
   Widget _manageSuffixIcons() {
     clearButtonPressed() => clearAllSelected();
-     dropdownButtonPressed  () => _selectSearchMode();
+    dropdownButtonPressed() => _selectSearchMode();
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -275,7 +342,8 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
             style: widget.dropdownButtonProps.style,
             isSelected: widget.dropdownButtonProps.isSelected,
             selectedIcon: widget.dropdownButtonProps.selectedIcon,
-            onPressed: widget.dropdownButtonProps.onPressed ?? dropdownButtonPressed,
+            onPressed:
+                widget.dropdownButtonProps.onPressed ?? dropdownButtonPressed,
             icon: widget.dropdownButtonProps.icon,
             constraints: widget.dropdownButtonProps.constraints,
             hoverColor: widget.dropdownButtonProps.hoverColor,
@@ -298,6 +366,7 @@ class HighQMultiSelectDropDownState<T> extends State<HighQMultiSelectDropDown<T>
       ],
     );
   }
+
   RelativeRect _position(RenderBox popupButtonObject, RenderBox overlay) {
     return RelativeRect.fromSize(
       Rect.fromPoints(

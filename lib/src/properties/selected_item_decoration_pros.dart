@@ -8,6 +8,7 @@ class SelectedItemDecorationPros {
   final EdgeInsetsGeometry? removeItemWidgetPadding;
   final Widget? removeItemWidget;
   final TextStyle? selectedItemTextStyle;
+  final TextStyle? moreTextStyle;
 
   const SelectedItemDecorationPros({
     this.selectedItemBoxMargin =
@@ -21,5 +22,6 @@ class SelectedItemDecorationPros {
       color: Colors.red,
     ),
     this.selectedItemTextStyle,
+    this.moreTextStyle,
   });
 }
