@@ -595,6 +595,12 @@ class _DropDownCard<T> extends StatelessWidget {
                       noRecordText: noRecordText,
                       onChanged: onChanged,
                       loadingWidget: loadingWidget,
+                      validator: (T? value) {
+                        if (value == null) {
+                          return 'Please select an item';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -662,6 +668,7 @@ class _DropDownListView<T> extends StatefulWidget {
   final PaginatedSearchDropdownController<T> dropdownController;
   final void Function(T? value)? onChanged;
   final Widget? noRecordText;
+  final String? Function(T? value)? validator; // Validator function
 
   const _DropDownListView({
     required this.dropdownController,
@@ -670,6 +677,7 @@ class _DropDownListView<T> extends StatefulWidget {
     this.noRecordText,
     this.onChanged,
     this.loadingWidget,
+    this.validator,
   });
 
   @override
@@ -696,78 +704,108 @@ class _DropDownListViewState<T> extends State<_DropDownListView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: widget.paginatedRequest != null
-          ? widget.dropdownController.paginatedItemList
-          : widget.dropdownController.searchedItems,
-      builder: (
-        context,
-        List<MenuItemModel<T>>? itemList,
-        child,
-      ) {
-        return itemList == null
-            ? widget.loadingWidget != null
-                ? widget.loadingWidget!
-                : const Center(child: CircularProgressIndicator.adaptive())
-            : itemList.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.all(
-                      8,
-                    ),
-                    child: widget.noRecordText ?? const Text('No record'),
-                  )
-                : Scrollbar(
-                    thumbVisibility: true,
-                    controller: scrollController,
-                    child: NotificationListener(
-                      child: ListView.builder(
-                        controller: scrollController,
-                        padding: listViewPadding(
-                          isReversed: widget.isReversed,
-                        ),
-                        itemCount: itemList.length + 1,
-                        shrinkWrap: true,
-                        reverse: widget.isReversed,
-                        itemBuilder: (context, index) {
-                          if (index < itemList.length) {
-                            final item = itemList.elementAt(index);
-                            return PackageInkwellWidget(
-                              child: item.child,
-                              onTap: () {
-                                widget.dropdownController.selectedItem.value =
-                                    item;
-                                widget.onChanged?.call(item.value);
-                                Navigator.pop(context);
-                                item.onTap?.call();
-                              },
+    return FormField<T>(
+      validator: widget.validator,
+      builder: (FormFieldState<T> field) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ValueListenableBuilder(
+                valueListenable: widget.paginatedRequest != null
+                    ? widget.dropdownController.paginatedItemList
+                    : widget.dropdownController.searchedItems,
+                builder: (
+                  context,
+                  List<MenuItemModel<T>>? itemList,
+                  child,
+                ) {
+                  return itemList == null
+                      ? widget.loadingWidget != null
+                          ? widget.loadingWidget!
+                          : const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            )
+                      : itemList.isEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.all(
+                                8,
+                              ),
+                              child:
+                                  widget.noRecordText ?? const Text('No record'),
+                            )
+                          : Scrollbar(
+                              thumbVisibility: true,
+                              controller: scrollController,
+                              child: NotificationListener(
+                                child: ListView.builder(
+                                  controller: scrollController,
+                                  padding: listViewPadding(
+                                    isReversed: widget.isReversed,
+                                  ),
+                                  itemCount: itemList.length + 1,
+                                  shrinkWrap: true,
+                                  reverse: widget.isReversed,
+                                  itemBuilder: (context, index) {
+                                    if (index < itemList.length) {
+                                      final item = itemList.elementAt(index);
+                                      return PackageInkwellWidget(
+                                        child: item.child,
+                                        onTap: () {
+                                          widget.dropdownController.selectedItem
+                                              .value = item;
+                                          widget.onChanged?.call(item.value);
+                                          field.didChange(
+                                            item.value,
+                                          ); // Notify form field of the change
+                                          Navigator.pop(context);
+                                          item.onTap?.call();
+                                        },
+                                      );
+                                    } else {
+                                      return ValueListenableBuilder(
+                                        valueListenable:
+                                            widget.dropdownController.status,
+                                        builder: (
+                                          context,
+                                          PaginatedSearchDropdownStatus state,
+                                          child,
+                                        ) {
+                                          if (state ==
+                                              PaginatedSearchDropdownStatus
+                                                  .busy) {
+                                            return Center(
+                                              child: widget.loadingWidget != null
+                                                  ? widget.loadingWidget!
+                                                  : const Center(
+                                                      child:
+                                                          CircularProgressIndicator
+                                                              .adaptive(),
+                                                    ),
+                                            );
+                                          }
+                                          return const SizedBox.shrink();
+                                        },
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
                             );
-                          } else {
-                            return ValueListenableBuilder(
-                              valueListenable: widget.dropdownController.status,
-                              builder: (
-                                context,
-                                PaginatedSearchDropdownStatus state,
-                                child,
-                              ) {
-                                if (state ==
-                                    PaginatedSearchDropdownStatus.busy) {
-                                  return Center(
-                                    child: widget.loadingWidget != null
-                                        ? widget.loadingWidget!
-                                        : const Center(
-                                            child: CircularProgressIndicator
-                                                .adaptive(),
-                                          ),
-                                  );
-                                }
-                                return const SizedBox.shrink();
-                              },
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  );
+                },
+              ),
+            ),
+            // Display error text if any
+            if (field.hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  field.errorText ?? '',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+          ],
+        );
       },
     );
   }
