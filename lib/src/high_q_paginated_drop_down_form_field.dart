@@ -6,7 +6,6 @@ import 'model/menu_item_model.dart';
 @immutable
 class PaginatedSearchDropdownFormField<T> extends FormField<T> {
   final bool isEnabled;
-  final GlobalKey<FormFieldState<T>> formKey;
 
   final bool isDialogExpanded;
 
@@ -80,7 +79,6 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
     double? spaceBetweenDropDownAndItemsDialog,
   }) : this._(
           controller: controller,
-          formKey: formKey,
           items: items,
           key: key,
           onSaved: onSaved,
@@ -162,7 +160,6 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
           searchDelayDuration: searchDelayDuration,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
-          formKey: formKey,
           spaceBetweenDropDownAndItemsDialog:
               spaceBetweenDropDownAndItemsDialog,
         );
@@ -192,7 +189,6 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
     this.searchHintText,
     this.dropDownMaxHeight,
     this.searchDelayDuration,
-    required this.formKey,
     this.isDialogExpanded = true,
     this.hasTrailingClearIcon = true,
     this.spaceBetweenDropDownAndItemsDialog,
@@ -240,7 +236,6 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                       isDialogExpanded: isDialogExpanded,
                       spaceBetweenDropDownAndItemsDialog:
                           spaceBetweenDropDownAndItemsDialog,
-                      formKey: formKey,
                     ),
                   if (paginatedRequest != null)
                     HighQPaginatedDropdown<T>.paginated(
@@ -268,7 +263,6 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                       isDialogExpanded: isDialogExpanded,
                       spaceBetweenDropDownAndItemsDialog:
                           spaceBetweenDropDownAndItemsDialog,
-                      formKey: formKey,
                     ),
                   if (state.hasError)
                     errorWidget != null
