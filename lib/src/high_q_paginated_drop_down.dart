@@ -10,7 +10,9 @@ import '../high_q_paginated_drop_down.dart';
 class HighQPaginatedDropdown<T> extends StatefulWidget {
   final bool isEnabled;
   final bool showTextField;
-
+  final bool enableValidation;
+  final String? Function(T?)? validate;
+  final GlobalKey<FormFieldState<T>> formKey;
   final bool isDialogExpanded;
 
   final bool hasTrailingClearIcon;
@@ -63,6 +65,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
 
   const HighQPaginatedDropdown({
     Key? key,
+    required GlobalKey<FormFieldState<T>> formKey,
     PaginatedSearchDropdownController<T>? controller,
     Widget? hintText,
     Widget? loadingWidget,
@@ -75,6 +78,8 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     Widget? trailingIcon,
     Widget? trailingClearIcon,
     Widget? leadingIcon,
+    bool enableValidation = false,
+    String? Function(T?)? validate,
     void Function(T?)? onChanged,
     List<MenuItemModel<T>>? items,
     T? value,
@@ -91,7 +96,8 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
   }) : this._(
           key: key,
           hintText: hintText,
-          loadingWidget: loadingWidget,
+          formKey: formKey,
+          loadingWidget: loadingWidget ?? const CircularProgressIndicator.adaptive(),
           controller: controller,
           backgroundDecoration: backgroundDecoration,
           searchHintText: searchHintText,
@@ -116,6 +122,8 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
           paddingValueWhileIsDialogExpanded: paddingValueWhileIsDialogExpanded,
           searchDelayDuration: searchDelayDuration,
           initialFutureValue: initialValue,
+          enableValidation: enableValidation,
+          validate: validate,
         );
 
   const HighQPaginatedDropdown.paginated({
@@ -125,6 +133,7 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     )? paginatedRequest,
     int? requestItemCount,
     Key? key,
+    required GlobalKey<FormFieldState<T>> formKey,
     InputDecoration? textFieldDecoration,
     PaginatedSearchDropdownController<T>? controller,
     Widget? loadingWidget,
@@ -148,12 +157,18 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
     bool hasTrailingClearIcon = true,
     MenuItemModel<T>? initialValue,
     double? spaceBetweenDropDownAndItemsDialog,
+    bool enableValidation = false,
+    String? Function(T?)? validate,
   }) : this._(
           key: key,
+          formKey: formKey,
           controller: controller,
           textFieldDecoration: textFieldDecoration,
           paddingValueWhileIsDialogExpanded: paddingValueWhileIsDialogExpanded,
-          loadingWidget: loadingWidget,
+          loadingWidget:
+              loadingWidget ?? const CircularProgressIndicator.adaptive(),
+          enableValidation: enableValidation,
+          validate: validate,
           paginatedRequest: paginatedRequest,
           requestItemCount: requestItemCount,
           hintText: hintText,
@@ -181,8 +196,11 @@ class HighQPaginatedDropdown<T> extends StatefulWidget {
   const HighQPaginatedDropdown._({
     super.key,
     this.controller,
+    required this.formKey,
+    this.enableValidation = false,
     this.showTextField = true,
     this.loadingWidget,
+    this.validate,
     this.hintText,
     this.textFieldDecoration = const InputDecoration(),
     this.paddingValueWhileIsDialogExpanded,
@@ -251,6 +269,9 @@ class _HighQPaginatedDropdownState<T> extends State<HighQPaginatedDropdown<T>> {
   @override
   Widget build(BuildContext context) {
     final dropdownWidget = _DropDown(
+      loadingWidget: widget.loadingWidget!,
+      enableValidation: widget.enableValidation,
+      validate: widget.validate,
       controller: dropdownController,
       showTextField: widget.showTextField,
       isEnabled: widget.isEnabled,
@@ -287,6 +308,9 @@ class _HighQPaginatedDropdownState<T> extends State<HighQPaginatedDropdown<T>> {
 class _DropDown<T> extends StatelessWidget {
   final bool isEnabled;
   final bool showTextField;
+  final bool enableValidation;
+  final Widget loadingWidget;
+  final String? Function(T?)? validate;
   final bool isDialogExpanded;
   final InputDecoration? textFieldDecoration;
   final double? paddingValueWhileIsDialogExpanded;
@@ -322,11 +346,14 @@ class _DropDown<T> extends StatelessWidget {
     this.trailingClearIcon,
     this.onTapWhileDisableDropDown,
     this.padding,
+    this.loadingWidget = const CircularProgressIndicator.adaptive(),
     this.textFieldDecoration = const InputDecoration(
       isDense: true,
     ),
     this.hintText,
     this.dropDownMaxHeight,
+    this.enableValidation = false,
+    this.validate,
     this.paginatedRequest,
     this.noRecordText,
     this.onChanged,
@@ -493,6 +520,9 @@ class _DropDown<T> extends StatelessWidget {
                   searchHintText: searchHintText,
                   searchDelayDuration: searchDelayDuration,
                   textFieldDecoration: textFieldDecoration,
+                  validate: validate,
+                  enableValidation: enableValidation,
+                  loadingWidget: loadingWidget,
                 ),
               ),
             ],
@@ -540,6 +570,8 @@ class _DropDownCard<T> extends StatelessWidget {
     int page,
     String? searchText,
   )? paginatedRequest;
+  final bool enableValidation;
+  final String? Function(T?)? validate;
   final PaginatedSearchDropdownController<T> controller;
   final String? searchHintText;
   final void Function(T? value)? onChanged;
@@ -551,6 +583,8 @@ class _DropDownCard<T> extends StatelessWidget {
     required this.showTextField,
     required this.isReversed,
     this.searchHintText,
+    this.validate,
+    this.enableValidation = false,
     this.textFieldDecoration = const InputDecoration(
       isDense: true,
     ),
@@ -595,6 +629,8 @@ class _DropDownCard<T> extends StatelessWidget {
                       noRecordText: noRecordText,
                       onChanged: onChanged,
                       loadingWidget: loadingWidget,
+                      enableValidation: enableValidation,
+                      validate: validate,
                     ),
                   ),
                 ],
@@ -654,7 +690,10 @@ class _MultiSelectDropDownBar<T> extends StatelessWidget {
 
 class _DropDownListView<T> extends StatefulWidget {
   final bool isReversed;
+  final bool enableValidation;
+  final String? Function(T?)? validate;
   final Widget? loadingWidget;
+
   final Future<List<MenuItemModel<T>>?> Function(
     int page,
     String? searchText,
@@ -666,7 +705,9 @@ class _DropDownListView<T> extends StatefulWidget {
   const _DropDownListView({
     required this.dropdownController,
     required this.isReversed,
+    this.enableValidation = false,
     this.paginatedRequest,
+    this.validate,
     this.noRecordText,
     this.onChanged,
     this.loadingWidget,
@@ -696,78 +737,84 @@ class _DropDownListViewState<T> extends State<_DropDownListView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: widget.paginatedRequest != null
-          ? widget.dropdownController.paginatedItemList
-          : widget.dropdownController.searchedItems,
-      builder: (
-        context,
-        List<MenuItemModel<T>>? itemList,
-        child,
-      ) {
-        return itemList == null
-            ? widget.loadingWidget != null
-                ? widget.loadingWidget!
-                : const Center(child: CircularProgressIndicator.adaptive())
-            : itemList.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.all(
-                      8,
-                    ),
-                    child: widget.noRecordText ?? const Text('No record'),
-                  )
-                : Scrollbar(
-                    thumbVisibility: true,
-                    controller: scrollController,
-                    child: NotificationListener(
-                      child: ListView.builder(
-                        controller: scrollController,
-                        padding: listViewPadding(
-                          isReversed: widget.isReversed,
+    return FormField<T>(
+      validator: widget.enableValidation ? widget.validate : null,
+      builder: (field) {
+        return ValueListenableBuilder(
+          valueListenable: widget.paginatedRequest != null
+              ? widget.dropdownController.paginatedItemList
+              : widget.dropdownController.searchedItems,
+          builder: (
+            context,
+            List<MenuItemModel<T>>? itemList,
+            child,
+          ) {
+            return itemList == null
+                ? widget.loadingWidget != null
+                    ? widget.loadingWidget!
+                    : const Center(child: CircularProgressIndicator.adaptive())
+                : itemList.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(
+                          8,
                         ),
-                        itemCount: itemList.length + 1,
-                        shrinkWrap: true,
-                        reverse: widget.isReversed,
-                        itemBuilder: (context, index) {
-                          if (index < itemList.length) {
-                            final item = itemList.elementAt(index);
-                            return PackageInkwellWidget(
-                              child: item.child,
-                              onTap: () {
-                                widget.dropdownController.selectedItem.value =
-                                    item;
-                                widget.onChanged?.call(item.value);
-                                Navigator.pop(context);
-                                item.onTap?.call();
-                              },
-                            );
-                          } else {
-                            return ValueListenableBuilder(
-                              valueListenable: widget.dropdownController.status,
-                              builder: (
-                                context,
-                                PaginatedSearchDropdownStatus state,
-                                child,
-                              ) {
-                                if (state ==
-                                    PaginatedSearchDropdownStatus.busy) {
-                                  return Center(
-                                    child: widget.loadingWidget != null
-                                        ? widget.loadingWidget!
-                                        : const Center(
-                                            child: CircularProgressIndicator
-                                                .adaptive(),
-                                          ),
-                                  );
-                                }
-                                return const SizedBox.shrink();
-                              },
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  );
+                        child: widget.noRecordText ?? const Text('No record'),
+                      )
+                    : Scrollbar(
+                        thumbVisibility: true,
+                        controller: scrollController,
+                        child: NotificationListener(
+                          child: ListView.builder(
+                            controller: scrollController,
+                            padding: listViewPadding(
+                              isReversed: widget.isReversed,
+                            ),
+                            itemCount: itemList.length + 1,
+                            shrinkWrap: true,
+                            reverse: widget.isReversed,
+                            itemBuilder: (context, index) {
+                              if (index < itemList.length) {
+                                final item = itemList.elementAt(index);
+                                return PackageInkwellWidget(
+                                  child: item.child,
+                                  onTap: () {
+                                    widget.dropdownController.selectedItem
+                                        .value = item;
+                                    widget.onChanged?.call(item.value);
+                                    Navigator.pop(context);
+                                    item.onTap?.call();
+                                  },
+                                );
+                              } else {
+                                return ValueListenableBuilder(
+                                  valueListenable:
+                                      widget.dropdownController.status,
+                                  builder: (
+                                    context,
+                                    PaginatedSearchDropdownStatus state,
+                                    child,
+                                  ) {
+                                    if (state ==
+                                        PaginatedSearchDropdownStatus.busy) {
+                                      return Center(
+                                        child: widget.loadingWidget != null
+                                            ? widget.loadingWidget!
+                                            : const Center(
+                                                child: CircularProgressIndicator
+                                                    .adaptive(),
+                                              ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      );
+          },
+        );
       },
     );
   }

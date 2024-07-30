@@ -6,6 +6,7 @@ import 'model/menu_item_model.dart';
 @immutable
 class PaginatedSearchDropdownFormField<T> extends FormField<T> {
   final bool isEnabled;
+  final GlobalKey<FormFieldState<T>> formKey;
 
   final bool isDialogExpanded;
 
@@ -55,6 +56,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
   PaginatedSearchDropdownFormField({
     required List<MenuItemModel<T>>? items,
     Key? key,
+    required GlobalKey<FormFieldState<T>> formKey,
     PaginatedSearchDropdownController<T>? controller,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
@@ -78,6 +80,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
     double? spaceBetweenDropDownAndItemsDialog,
   }) : this._(
           controller: controller,
+          formKey: formKey,
           items: items,
           key: key,
           onSaved: onSaved,
@@ -110,6 +113,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
     )? paginatedRequest,
     int? requestItemCount,
     Key? key,
+    required GlobalKey<FormFieldState<T>> formKey,
     PaginatedSearchDropdownController<T>? controller,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
@@ -158,6 +162,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
           searchDelayDuration: searchDelayDuration,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
+          formKey: formKey,
           spaceBetweenDropDownAndItemsDialog:
               spaceBetweenDropDownAndItemsDialog,
         );
@@ -187,6 +192,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
     this.searchHintText,
     this.dropDownMaxHeight,
     this.searchDelayDuration,
+    required this.formKey,
     this.isDialogExpanded = true,
     this.hasTrailingClearIcon = true,
     this.spaceBetweenDropDownAndItemsDialog,
@@ -234,6 +240,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                       isDialogExpanded: isDialogExpanded,
                       spaceBetweenDropDownAndItemsDialog:
                           spaceBetweenDropDownAndItemsDialog,
+                      formKey: formKey,
                     ),
                   if (paginatedRequest != null)
                     HighQPaginatedDropdown<T>.paginated(
@@ -261,6 +268,7 @@ class PaginatedSearchDropdownFormField<T> extends FormField<T> {
                       isDialogExpanded: isDialogExpanded,
                       spaceBetweenDropDownAndItemsDialog:
                           spaceBetweenDropDownAndItemsDialog,
+                      formKey: formKey,
                     ),
                   if (state.hasError)
                     errorWidget != null

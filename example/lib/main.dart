@@ -10,28 +10,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  final TextEditingController _userEditTextController = TextEditingController();
-  final PaginatedSearchDropdownController<Anime> searchableDropdownController1 =
-      PaginatedSearchDropdownController<Anime>();
-  final PaginatedSearchDropdownController<int> searchableDropdownController2 =
-      PaginatedSearchDropdownController<int>();
-  final PaginatedSearchDropdownController<int> searchableDropdownController3 =
-      PaginatedSearchDropdownController<int>();
-  final PaginatedSearchDropdownController<int> searchableDropdownController4 =
-      PaginatedSearchDropdownController<int>();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>(
-    debugLabel: '_formKey',
-  );
 
-  final GlobalKey<FormFieldState<int>> dropdownFormFieldKey1 =
-      GlobalKey<FormFieldState<int>>();
-  final GlobalKey<FormFieldState<int>> dropdownFormFieldKey2 =
-      GlobalKey<FormFieldState<int>>();
-  final GlobalKey<FormFieldState<int>> dropdownFormFieldKey3 =
-      GlobalKey<FormFieldState<int>>();
-  final GlobalKey<FormFieldState<int>> dropdownFormFieldKey4 =
-      GlobalKey<FormFieldState<int>>();
-
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>(debugLabel: '_formKey');
+  final PaginatedSearchDropdownController<Anime> searchableDropdownController1 = PaginatedSearchDropdownController<Anime>();
+  final GlobalKey<FormFieldState<Anime>> dropdownFormFieldKey1 = GlobalKey<FormFieldState<Anime>>();
+  final GlobalKey<FormFieldState<Anime>> dropdownFormFieldKey2 = GlobalKey<FormFieldState<Anime>>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,6 +38,7 @@ class MyApp extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               HighQPaginatedDropdown<Anime>.paginated(
+                formKey: dropdownFormFieldKey2,
                 hintText: Text(
                   'search_for_city',
                   style: Theme.of(context).inputDecorationTheme.hintStyle,
@@ -113,93 +97,90 @@ class MyApp extends StatelessWidget {
                 onChanged: (Anime? data) {},
               ),
               const SizedBox(height: 20),
-              FormField<Anime>(
-                validator: (Anime? value) {
+              HighQPaginatedDropdown<Anime>.paginated(
+                formKey: dropdownFormFieldKey1,  // Unique key for this field
+                enableValidation: true,
+                validate: (Anime? value) {
                   if (value == null) {
-                    return 'Please select an anime';
+                    return 'dsfhsdhsgfhdfghgfhdffjdfgj';
                   }
                   return null;
                 },
-                builder: (FormFieldState<Anime> state) {
-                  return HighQPaginatedDropdown<Anime>.paginated(
-                    controller: searchableDropdownController1,
-                    requestItemCount: 25,
-                    width: 10,
-                    loadingWidget: const CircularProgressIndicator(
-                      color: Colors.green,
-                    ),
-                    backgroundDecoration: (child) {
-                      return InputDecorator(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              15.0,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                          ),
-                          labelText: 'Anime',
-                          errorText: state.errorText,
+                showTextField: false,
+                key: dropdownFormFieldKey1,
+                controller: searchableDropdownController1,
+                requestItemCount: 25,
+                width: 10,
+                loadingWidget: const CircularProgressIndicator(
+                  color: Colors.green,
+                ),
+                backgroundDecoration: (child) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          15.0,
                         ),
-                        child: child,
-                      );
-                    },
-                    hintText: const Text('Search Anime'),
-                    paginatedRequest: (
-                        int page,
-                        String? searchText,
-                        ) async {
-                      final AnimePaginatedList? paginatedList =
-                      await getAnimeList(
-                        page: page,
-                        queryParameters: {
-                          'page': page,
-                          "q": searchText,
-                        },
-                      );
-                      return paginatedList?.animeList?.map((e) {
-                        return MenuItemModel<Anime>(
-                          value: e,
-                          label: e.title ?? '',
-                          child: Text(
-                            e.title ?? '',
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
-                      }).toList();
-                    },
-                    padding: const EdgeInsets.all(0),
-                    onChanged: (Anime? value) {
-                      debugPrint('$value');
-                      state.didChange(value); // Notify FormField of the change
-                    },
-                    hasTrailingClearIcon: true,
-                    trailingIcon: const Icon(
-                      Icons.arrow_circle_down_outlined,
-                      color: Colors.green,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      labelText: 'Pokemons',
                     ),
-                    searchHintText: 'Hi search for any thing',
-                    trailingClearIcon: const Icon(
-                      Icons.delete,
-                      color: Colors.green,
-                    ),
-                    searchDelayDuration: const Duration(milliseconds: 800),
-                    leadingIcon: const Icon(
-                      Icons.language,
-                      color: Colors.green,
-                    ),
-                    spaceBetweenDropDownAndItemsDialog: 10,
-                    isEnabled: true,
-                    onTapWhileDisableDropDown: () {},
-                    //dropDownMaxHeight: 150,
-                    isDialogExpanded: true,
-                    paddingValueWhileIsDialogExpanded: 16,
-                    noRecordText: const Text('HJKHJKHJKLJKJH'),
+                    child: child,
                   );
                 },
+                hintText: const Text('Search Anime'),
+                paginatedRequest: (
+                  int page,
+                  String? searchText,
+                ) async {
+                  final AnimePaginatedList? paginatedList = await getAnimeList(
+                    page: page,
+                    queryParameters: {
+                      'page': page,
+                      "q": searchText,
+                    },
+                  );
+                  return paginatedList?.animeList?.map((e) {
+                    return MenuItemModel<Anime>(
+                      value: e,
+                      label: e.title ?? '',
+                      child: Text(
+                        e.title ?? '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  }).toList();
+                },
+                padding: const EdgeInsets.all(0),
+                onChanged: (Anime? value) {
+                  debugPrint('$value');
+                },
+                hasTrailingClearIcon: true,
+                trailingIcon: const Icon(
+                  Icons.arrow_circle_down_outlined,
+                  color: Colors.green,
+                ),
+                searchHintText: 'Hi search for any thing',
+                trailingClearIcon: const Icon(
+                  Icons.delete,
+                  color: Colors.green,
+                ),
+                searchDelayDuration: const Duration(milliseconds: 800),
+                leadingIcon: const Icon(
+                  Icons.language,
+                  color: Colors.green,
+                ),
+                spaceBetweenDropDownAndItemsDialog: 10,
+                isEnabled: true,
+                onTapWhileDisableDropDown: () {},
+                //dropDownMaxHeight: 150,
+                isDialogExpanded: true,
+                paddingValueWhileIsDialogExpanded: 16,
+                noRecordText: const Text('HJKHJKHJKLJKJH'),
               ),
               const SizedBox(height: 50),
               ElevatedButton(
